@@ -5,6 +5,9 @@
   .messages {
     border: 1px solid $color-black;
     flex-grow: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
   }
   .message-input {
     display: flex;
@@ -18,6 +21,23 @@
       font-size: 20px;
       flex-grow: 1;
       padding: 10px;
+    }
+  }
+  .message {
+    max-width: 80%;
+    border: 1px solid $color-black;
+    border-radius: 5px;
+    margin: 10px 5px;
+    padding: 10px;
+    &.sender {
+      background-color: $primary;
+      color: $white;
+      text-align: right;
+      align-self: flex-end;
+    }
+    &.recipient {
+      color: $primary;
+      align-self: flex-start;
     }
   }
 }

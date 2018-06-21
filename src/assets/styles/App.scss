@@ -1,7 +1,13 @@
 .App {
+  height: 100vh;
   display: flex;
-  min-height: 100vh;
-  & > div {
-    padding: 30px;
+  flex-direction: column;
+  .flex-container {
+    display: flex;
+    flex-grow: 1;
+    & > div {
+      box-sizing: border-box;
+      padding: 30px;
+    }
   }
 }

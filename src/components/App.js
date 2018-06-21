@@ -43,6 +43,15 @@ class App extends Component {
     this.setUser(loginResults);
   }
 
+  logout = () => {
+    localStorage.removeItem('token');
+    this.setState({
+      loggedIn: false,
+      selectedUser: null,
+      user: null,
+    })
+  }
+
   googleLogin = async (user) => {
     const loginResults = await googleAuth(user);
     this.setUser(loginResults);
@@ -68,15 +77,24 @@ class App extends Component {
     const content = loggedIn ?
       (
         <div className="App">
-          <UserList
-            selectUser={this.selectUser}
-            selectedUser={selectedUser}
-            user={user}
-          />
-          <Messenger
-            selectedUser={selectedUser}
-            user={user}
-          />
+          <div className="navbar">
+            <button
+              onClick={this.logout}
+            >
+              Logout
+            </button>
+          </div>
+          <div className="flex-container">
+            <UserList
+              selectUser={this.selectUser}
+              selectedUser={selectedUser}
+              user={user}
+            />
+            <Messenger
+              selectedUser={selectedUser}
+              user={user}
+            />
+          </div>
         </div>
       )
       :

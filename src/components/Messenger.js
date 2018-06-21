@@ -50,21 +50,45 @@ class Messenger extends Component {
           query: getUsers,
           variables: { id: user.id },
         },
+        {
+          query: getUser,
+          variables: {
+            id: selectedUser,
+            self: user.id,
+          }
+        }
       ]
     });
     this.setState({ content: '' })
   }
 
   render() {
-    console.log('MESSENGER PROPS', this.props);
     const { content } = this.state;
-    const { selectedUser } = this.props;
+    const { selectedUser, user } = this.props;
+    const fetchedUser = this.props.getUser.user;
+    const messages = fetchedUser ?
+      fetchedUser.messages : [];
+
+    console.log('MESSAGES', messages);
 
     return (
       <div className="Messenger">
         <h1>Messenger</h1>
         <div className="messages">
-
+          {messages.map(msg => {
+            const isSender = user.id === Number(msg.sender_id);
+            console.log('IS SENDER', isSender);
+            const messageClass = isSender ?
+              'message sender' : 'message recipient';
+            return (
+              <div
+                key={msg.id}
+                className={messageClass}
+              >
+                {msg.content}
+              </div>
+            )
+          })}
         </div>
         <form
           onSubmit={evt => this.submit(evt)}

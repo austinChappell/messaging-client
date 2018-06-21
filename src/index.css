@@ -5,10 +5,15 @@ body {
   color: #234252; }
 
 .App {
+  height: 100vh;
   display: flex;
-  min-height: 100vh; }
-  .App > div {
-    padding: 30px; }
+  flex-direction: column; }
+  .App .flex-container {
+    display: flex;
+    flex-grow: 1; }
+    .App .flex-container > div {
+      box-sizing: border-box;
+      padding: 30px; }
 
 .Messenger {
   flex-grow: 1;
@@ -16,7 +21,10 @@ body {
   flex-direction: column; }
   .Messenger .messages {
     border: 1px solid #234252;
-    flex-grow: 1; }
+    flex-grow: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column; }
   .Messenger .message-input {
     display: flex;
     margin-top: 10px; }
@@ -28,6 +36,20 @@ body {
       font-size: 20px;
       flex-grow: 1;
       padding: 10px; }
+  .Messenger .message {
+    max-width: 80%;
+    border: 1px solid #234252;
+    border-radius: 5px;
+    margin: 10px 5px;
+    padding: 10px; }
+    .Messenger .message.sender {
+      background-color: #29318f;
+      color: #ffffff;
+      text-align: right;
+      align-self: flex-end; }
+    .Messenger .message.recipient {
+      color: #29318f;
+      align-self: flex-start; }
 
 .UserList {
   padding: 0 20px; }
