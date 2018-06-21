@@ -1,11 +1,18 @@
 import { gql } from 'apollo-boost';
 
 export const getUsers = gql`
-  {
+  query($id: ID) {
     users {
       id
       first_name
       last_name
+      messages(id: $id) {
+        id
+        content
+      }
+      last_message(id: $id) {
+        content
+      }
     }
   }
 `;

@@ -4,10 +4,12 @@ import { graphql } from 'react-apollo';
 import { addMessage } from '../queries/';
 
 class Messenger extends Component {
-  state = {
-    content: '',
-    recipientId: 2,
-    senderId: 5,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      content: '',
+    }
   }
 
   handleChange = (evt) => {
@@ -22,17 +24,24 @@ class Messenger extends Component {
       recipientId,
       senderId,
     } = this.state;
+    const {
+      user,
+      selectedUser,
+    } = this.props;
+
     this.props.mutate({
       variables: {
         content,
-        recipient_id: recipientId,
-        sender_id: senderId,
+        recipient_id: selectedUser,
+        sender_id: user.id,
       }
     })
   }
 
   render() {
+    console.log('MESSENGER STATE', this.state);
     const { content } = this.state;
+    const { selectedUser } = this.props;
 
     return (
       <div className="Messenger">
@@ -48,7 +57,11 @@ class Messenger extends Component {
             onChange={evt => this.handleChange(evt)}
             value={content}
           />
-          <button>Send</button>
+          <button
+            disabled={!selectedUser}
+          >
+            Send
+          </button>
         </form>
       </div>
     )

@@ -5,8 +5,11 @@ import { getUsers } from '../queries/';
 
 class UserList extends Component {
   render() {
-    console.log('USER LIST PROPS', this.props);
-    const { data } = this.props;
+    const {
+      data,
+      selectUser,
+      user,
+    } = this.props;
 
     if (data.loading) {
       return (
@@ -17,21 +20,33 @@ class UserList extends Component {
     }
 
     const { users } = data;
+    console.log('USERS', users);
 
     return (
       <div className="UserList">
         <h1>User List</h1>
-        {users.map(user => (
-          <div
-            className="user"
-            key={user.id}
-          >
-            {`${user.first_name} ${user.last_name}`}
-          </div>
-        ))}
+        {users.map(u => {
+          if (Number(u.id) !== user.id) {
+            return (
+              <div
+                key={u.id}
+                className="user"
+                onClick={() => selectUser(u.id)}
+              >
+                {`${u.first_name} ${u.last_name}`}
+              </div>
+            )
+          }
+        })}
       </div>
     )
   }
 }
 
-export default graphql(getUsers)(UserList);
+export default graphql(getUsers, {
+  options: props => ({
+    variables: {
+      id: props.user.id,
+    }
+  })
+})(UserList);

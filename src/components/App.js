@@ -22,6 +22,7 @@ const client = new ApolloClient({
 class App extends Component {
   state = {
     loggedIn: false,
+    selectedUser: null,
     user: null,
   }
 
@@ -47,19 +48,35 @@ class App extends Component {
     this.setUser(loginResults);
   }
 
+  selectUser = (id) => {
+    console.log('SELECTING USER', id);
+    this.setState({ selectedUser: id })
+  }
+
   setUser = (user) => {
     localStorage.setItem('token', user.token);
     this.setState({ loggedIn: true, user })
   }
 
   render() {
-    const { loggedIn } = this.state;
+    const {
+      loggedIn,
+      selectedUser,
+      user,
+    } = this.state;
 
     const content = loggedIn ?
       (
         <div className="App">
-          <UserList />
-          <Messenger />
+          <UserList
+            selectUser={this.selectUser}
+            selectedUser={selectedUser}
+            user={user}
+          />
+          <Messenger
+            selectedUser={selectedUser}
+            user={user}
+          />
         </div>
       )
       :
