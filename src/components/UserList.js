@@ -3,6 +3,10 @@ import { graphql } from 'react-apollo';
 
 import { getUsers } from '../queries/';
 
+import helpers from '../helpers/';
+
+const { truncate } = helpers;
+
 class UserList extends Component {
   render() {
     const {
@@ -27,13 +31,19 @@ class UserList extends Component {
         <h1>User List</h1>
         {users.map(u => {
           if (Number(u.id) !== user.id) {
+            const message = u.last_message.content;
             return (
               <div
                 key={u.id}
                 className="user"
                 onClick={() => selectUser(u.id)}
               >
-                {`${u.first_name} ${u.last_name}`}
+                <h4>
+                  {`${u.first_name} ${u.last_name}`}
+                </h4>
+                <p>
+                  {truncate(message, 20)}
+                </p>
               </div>
             )
           }
