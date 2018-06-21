@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
 
-import { addMessage, getUser } from '../queries/';
+import { addMessage, getUser, getUsers } from '../queries/';
 
 class Messenger extends Component {
   constructor(props) {
@@ -44,8 +44,15 @@ class Messenger extends Component {
         content,
         recipient_id: selectedUser,
         sender_id: user.id,
-      }
-    })
+      },
+      refetchQueries: [
+        {
+          query: getUsers,
+          variables: { id: user.id },
+        },
+      ]
+    });
+    this.setState({ content: '' })
   }
 
   render() {
