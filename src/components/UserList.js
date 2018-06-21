@@ -24,14 +24,13 @@ class UserList extends Component {
     }
 
     const { users } = data;
-    console.log('USERS', users);
 
     return (
       <div className="UserList">
         <h1>User List</h1>
         {users.map(u => {
           if (Number(u.id) !== user.id) {
-            const message = u.last_message.content;
+            const message = u.last_message ? u.last_message.content : '';
             return (
               <div
                 key={u.id}

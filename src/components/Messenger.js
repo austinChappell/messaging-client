@@ -69,15 +69,12 @@ class Messenger extends Component {
     const messages = fetchedUser ?
       fetchedUser.messages : [];
 
-    console.log('MESSAGES', messages);
-
     return (
       <div className="Messenger">
         <h1>Messenger</h1>
         <div className="messages">
           {messages.map(msg => {
             const isSender = user.id === Number(msg.sender_id);
-            console.log('IS SENDER', isSender);
             const messageClass = isSender ?
               'message sender' : 'message recipient';
             return (
