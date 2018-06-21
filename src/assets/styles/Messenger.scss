@@ -1,3 +1,23 @@
 .Messenger {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  .messages {
+    border: 1px solid $color-black;
+    flex-grow: 1;
+  }
+  .message-input {
+    display: flex;
+    margin-top: 10px;
+    button {
+      margin-left: 10px;
+      padding: 10px 20px;
+    }
+    input {
+      box-sizing: border-box;
+      font-size: 20px;
+      flex-grow: 1;
+      padding: 10px;
+    }
+  }
 }

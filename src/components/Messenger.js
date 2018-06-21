@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 
-import { addMessage } from '../queries/';
+import { addMessage, getUser } from '../queries/';
 
 class Messenger extends Component {
   constructor(props) {
@@ -10,6 +10,16 @@ class Messenger extends Component {
     this.state = {
       content: '',
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedUser !== this.props.selectedUser) {
+      this.getMessages(this.props.selectedUser);
+    }
+  }
+
+  getMessages = (id) => {
+    
   }
 
   handleChange = (evt) => {
@@ -39,7 +49,7 @@ class Messenger extends Component {
   }
 
   render() {
-    console.log('MESSENGER STATE', this.state);
+    console.log('MESSENGER PROPS', this.props);
     const { content } = this.state;
     const { selectedUser } = this.props;
 
@@ -52,20 +62,34 @@ class Messenger extends Component {
         <form
           onSubmit={evt => this.submit(evt)}
         >
-          <input
-            placeholder="Type your message here..."
-            onChange={evt => this.handleChange(evt)}
-            value={content}
-          />
-          <button
-            disabled={!selectedUser}
-          >
-            Send
-          </button>
+          <div className="message-input">
+            <input
+              placeholder="Type your message here..."
+              onChange={evt => this.handleChange(evt)}
+              value={content}
+            />
+            <button
+              disabled={!selectedUser}
+            >
+              Send
+            </button>
+          </div>
         </form>
       </div>
     )
   }
 }
 
-export default graphql(addMessage)(Messenger);
+export default compose(
+  graphql(addMessage),
+  graphql(getUser, {
+    name: 'getUser',
+    options: props => ({
+      variables: {
+        id: props.selectedUser,
+        // self is used to get messages between self and other user
+        self: props.user.id,
+      }
+    })
+  })
+)(Messenger);

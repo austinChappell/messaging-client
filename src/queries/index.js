@@ -18,11 +18,19 @@ export const getUsers = gql`
 `;
 
 export const getUser = gql`
-  query($id: ID) {
+  query($id: ID, $self: ID) {
     user(id: $id) {
       id
       first_name
       last_name
+      messages(id: $self) {
+        id
+        content
+        recipient_id
+        sender_id
+        timestamp
+        read
+      }
     }
   }
 `;

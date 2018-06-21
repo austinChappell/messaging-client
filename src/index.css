@@ -5,10 +5,29 @@ body {
   color: #234252; }
 
 .App {
-  display: flex; }
+  display: flex;
+  min-height: 100vh; }
+  .App > div {
+    padding: 30px; }
 
 .Messenger {
-  flex-grow: 1; }
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; }
+  .Messenger .messages {
+    border: 1px solid #234252;
+    flex-grow: 1; }
+  .Messenger .message-input {
+    display: flex;
+    margin-top: 10px; }
+    .Messenger .message-input button {
+      margin-left: 10px;
+      padding: 10px 20px; }
+    .Messenger .message-input input {
+      box-sizing: border-box;
+      font-size: 20px;
+      flex-grow: 1;
+      padding: 10px; }
 
 .UserList {
   padding: 0 20px; }
