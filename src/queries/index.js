@@ -19,3 +19,16 @@ export const getUser = gql`
     }
   }
 `;
+
+export const addMessage = gql`
+  mutation($content: String!, $sender_id: ID!, $recipient_id: ID!) {
+    addMessage(content: $content, sender_id: $sender_id, recipient_id: $recipient_id) {
+      id
+      content
+      sender_id
+      recipient_id
+      read
+      timestamp
+    }
+  }
+`;
