@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
 
-import { addMessage, getUser } from '../queries/';
+import queries from '../queries/';
+
+const { addMessage, getUser, readMessages, myUnreadMessages } = queries;
 
 class Messenger extends Component {
   constructor(props) {
@@ -28,7 +30,23 @@ class Messenger extends Component {
 
     // drawer is closing
     if (prevProps.openDrawer && !this.props.openDrawer) {
+      const { selectedUser, user } = this.props;
       this.props.getUser.refetch();
+      setTimeout(() => {
+        this.props.readMessages({
+          variables: {
+            recipient_id: user.id,
+            sender_id: selectedUser,
+          },
+          // refetchQueries: [
+          //   { query: myUnreadMessages,
+          //     variables: {
+          //       id: user.id,
+          //     }
+          //   },
+          // ]
+        });
+      }, 1000)
     }
   }
 
@@ -51,6 +69,20 @@ class Messenger extends Component {
 
   scrollDown = () => {
     this.lastMsg.scrollIntoView({ behavior: 'smooth' });
+    const { selectedUser, user } = this.props;
+    // this.props.readMessages({
+    //   variables: {
+    //     recipient_id: user.id,
+    //     sender_id: selectedUser,
+    //   },
+      // refetchQueries: [
+      //   { query: myUnreadMessages,
+      //     variables: {
+      //       id: user.id,
+      //     }
+      //   },
+      // ]
+    // });
   }
 
   submit = (evt) => {
@@ -142,6 +174,7 @@ class Messenger extends Component {
   }
 
   render() {
+    console.log('MESSENGER PROPS', this.props);
     const {
       content,
       friendTyping,
@@ -220,5 +253,6 @@ export default compose(
         self: props.user.id,
       }
     })
-  })
+  }),
+  graphql(readMessages, { name: 'readMessages' }),
 )(Messenger);

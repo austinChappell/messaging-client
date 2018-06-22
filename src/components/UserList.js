@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
 
-import { getUsers } from '../queries/';
-
+import queries from '../queries/';
 import helpers from '../helpers/';
 
-const { searchMessages, truncate } = helpers;
+const { getUsers, myUnreadMessages } = queries;
+
+const { getUnread, searchMessages, truncate } = helpers;
 
 class UserList extends Component {
   state = {
@@ -16,7 +17,21 @@ class UserList extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.openDrawer && this.props.openDrawer) {
-      this.props.data.refetch();
+      this.props.getUsers.refetch();
+    }
+    if (this.props.unreadMessages.myUnreadMessages) {
+      const prevMsgs = prevProps.unreadMessages.myUnreadMessages ? 
+        prevProps.unreadMessages.myUnreadMessages : [];
+      const currMsgs = this.props.unreadMessages.myUnreadMessages;
+      const numChanged = prevMsgs.length !== currMsgs.length;
+      const newUnread = numChanged && currMsgs.length > 0;
+      const allRead = numChanged && currMsgs.length == 0;
+
+      if (newUnread) {
+        this.props.notify(true);
+      } else if (allRead) {
+        this.props.notify(false);
+      }
     }
   }
 
@@ -45,12 +60,21 @@ class UserList extends Component {
   render() {
     const { searchResults, searchValue } = this.state;
     const {
-      data,
+      getUsers: data,
       openDrawer,
       selectedUser,
+      unreadMessages,
       user,
     } = this.props;
 
+    const {myUnreadMessages} = unreadMessages;
+
+    const ids = myUnreadMessages ?
+      myUnreadMessages
+        .map(m => Number(m.sender_id))
+      :
+      [];
+    
     const isFiltering = searchValue.trim() !== '';
 
     if (data.loading) {
@@ -80,7 +104,19 @@ class UserList extends Component {
         </div>
 
         {users.map(u => {
-          if (Number(u.id) === user.id) {
+          const hasUnread = ids.includes(Number(u.id));
+          const notificationDot = hasUnread ?
+          (
+            <FontAwesome
+              name="circle"
+              style={{
+                color : '#ff0000',
+                fontSize: 12,
+              }}
+            />
+          ) : null;
+        
+          if (Number(u.id) == user.id) {
             return null;
           }
           const message = u.last_message ? u.last_message.content : '';
@@ -92,7 +128,7 @@ class UserList extends Component {
               onClick={() => this.selectUser(u.id)}
             >
               <h4>
-                {`${u.first_name} ${u.last_name}`}
+                {notificationDot} {`${u.first_name} ${u.last_name}`}
               </h4>
               <p>
                 {truncate(message, 20)}
@@ -105,10 +141,23 @@ class UserList extends Component {
   }
 }
 
-export default graphql(getUsers, {
-  options: props => ({
-    variables: {
-      id: props.user.id,
-    }
+export default compose(
+  graphql(getUsers, {
+    name: 'getUsers',
+    options: props => ({
+      variables: {
+        id: props.user.id,
+      }
+    })
+  }),
+  graphql(myUnreadMessages, {
+    name: 'unreadMessages',
+    options: props => ({
+      variables: {
+        id: props.user.id,
+      }
+    })
   })
-})(UserList);
+)(UserList)
+
+

@@ -25,6 +25,7 @@ const client = new ApolloClient({
 class App extends Component {
   state = {
     checkedToken: false,
+    hasUnread: false,
     loggedIn: false,
     openDrawer: false,
     selectedUser: null,
@@ -73,6 +74,10 @@ class App extends Component {
     this.setUser(loginResults);
   }
 
+  notify = (bool) => {
+    this.setState({ hasUnread: bool });
+  }
+
   selectUser = (id) => {
     this.setState({ selectedUser: id })
   }
@@ -89,6 +94,7 @@ class App extends Component {
   render() {
     const {
       checkedToken,
+      hasUnread,
       loggedIn,
       openDrawer,
       selectedUser,
@@ -104,6 +110,17 @@ class App extends Component {
       )
     }
 
+    const notificationDot = hasUnread ?
+      (
+        <FontAwesome
+          name="circle"
+          style={{
+            color : '#ff0000',
+            fontSize: 12,
+          }}
+        />
+      ) : null;
+
     const content = loggedIn ?
       (
         <div className="App">
@@ -111,8 +128,10 @@ class App extends Component {
             <div>
               <button
                 onClick={this.toggleDrawer}
+                style={{ display: 'flex', alignItems: 'flex-start' }}
               >
                 <FontAwesome name="bars" />
+                {notificationDot}
               </button>
             </div>
             <div className="navbar-right">
@@ -126,6 +145,7 @@ class App extends Component {
           </div>
           <div className="flex-container">
             <UserList
+              notify={this.notify}
               openDrawer={openDrawer}
               selectUser={this.selectUser}
               selectedUser={selectedUser}

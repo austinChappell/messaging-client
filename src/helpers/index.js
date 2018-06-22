@@ -1,4 +1,8 @@
 const helpers = {
+  getUnread: (users, user) => {
+    return users.messages.filter(m => !m.read && m.recipient_id === user.id);
+  },
+
   searchMessages: (users, searchValue) => {
     const downCaseVal = searchValue.toLowerCase();
 
