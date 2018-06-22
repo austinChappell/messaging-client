@@ -166,6 +166,10 @@ class Messenger extends Component {
       const senderMatch = senderId === selectedUser;
       const recipientMatch = Number(recipientId) === userId;
 
+      if (recipientMatch) {
+        this.props.unreadMessages.refetch();
+      }
+
       // was sent to user
       if (senderMatch && recipientMatch) {
         this.props.getUser.refetch();
@@ -187,7 +191,6 @@ class Messenger extends Component {
 
     const { myUnreadMessages: unread } = unreadMessages;
     const hasUnread = unread && unread.length > 0;
-    console.log('HAS UNREAD', hasUnread);
 
     const fetchedUser = this.props.getUser.user;
     const messages = fetchedUser ?
