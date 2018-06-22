@@ -1,3 +1,24 @@
 .UserList {
-  padding: 0 20px;
+  background-color: $primary-dark;
+  overflow: auto;
+  padding: 0;
+  .search-bar {
+    padding: 20px;
+    border-bottom: 1px solid $light;
+  }
+  .user {
+    border-bottom: 1px solid $light;
+    cursor: pointer;
+    padding: 20px;
+    &.active {
+      background-color: $primary;
+    }
+    h4 {
+      margin: 0;
+    }
+    p {
+      font-weight: 100;
+      font-size: 12px;
+    }
+  }
 }

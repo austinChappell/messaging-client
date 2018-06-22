@@ -58,7 +58,6 @@ class App extends Component {
   }
 
   selectUser = (id) => {
-    console.log('SELECTING USER', id);
     this.setState({ selectedUser: id })
   }
 

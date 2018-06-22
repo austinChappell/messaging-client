@@ -73,10 +73,12 @@ class Messenger extends Component {
     const fetchedUser = this.props.getUser.user;
     const messages = fetchedUser ?
       fetchedUser.messages : [];
+    const title = fetchedUser ?
+      fetchedUser.first_name : 'Select A User';
 
     return (
       <div className="Messenger">
-        <h1>Messenger</h1>
+        <h1>{title}</h1>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
             const isSender = user.id === Number(msg.sender_id);

@@ -7,7 +7,6 @@
     flex-grow: 1;
     & > div {
       box-sizing: border-box;
-      padding: 30px;
     }
   }
   .navbar {
@@ -15,6 +14,12 @@
     width: 100%;
     text-align: right;
     button {
+      background-color: $light;
+      border: none;
+      border-radius: 5px;
+      color: $dark;
+      font-size: 16px;
+      padding: 5px 10px;
       margin: 10px;
     }
   }

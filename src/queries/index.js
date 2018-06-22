@@ -7,7 +7,6 @@ export const getUsers = gql`
       first_name
       last_name
       messages(id: $id) {
-        id
         content
       }
       last_message(id: $id) {
