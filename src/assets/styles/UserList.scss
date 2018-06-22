@@ -16,6 +16,22 @@
   .search-bar {
     padding: 20px;
     border-bottom: 1px solid $light;
+    display: flex;
+    justify-content: space-between;
+    input {
+      border: 1px solid $dark;
+      font-size: 14px;
+      flex-grow: 1;
+      padding: 5px;
+      border-radius: 4px;
+    }
+    button {
+      background-color: transparent;
+      border: none;
+      color: $white;
+      font-size: 30px;
+      margin-left: 10px;
+    }
   }
   .user {
     border-bottom: 1px solid $light;

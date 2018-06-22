@@ -122,27 +122,37 @@ class App extends Component {
       :
       (
         <div className="LoginScreen">
-          <h1>Login</h1>
+          <h1>My GraphQL Chat App</h1>
 
-          <FacebookLogin
-            appId="1815948175379229"
-            callback={this.fbLogin}
-            fields="name,email"
-            render={renderProps => (
-              <button
-                onClick={renderProps.onClick}
-              >
-                Login with Facebook
-              </button>
-            )}
-          />
+          <div className="buttons">
+            <FacebookLogin
+              appId="1815948175379229"
+              callback={this.fbLogin}
+              fields="name,email"
+              render={renderProps => (
+                <button
+                  onClick={renderProps.onClick}
+                  style={{
+                    backgroundColor: '#3C5B97',
+                    color: '#ffffff',
+                  }}
+                >
+                  Login with Facebook
+                </button>
+              )}
+            />
 
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            buttonText="Login with Google"
-            onSuccess={this.googleLogin}
-            onFailure={this.googleLogin}
-          />
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              buttonText="Login with Google"
+              onSuccess={this.googleLogin}
+              onFailure={this.googleLogin}
+              style={{
+                backgroundColor: '#DE4940',
+                color: '#ffffff',
+              }}
+            />
+          </div>
 
         </div>
       );

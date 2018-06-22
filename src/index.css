@@ -31,11 +31,26 @@ button {
       padding: 5px 10px;
       margin: 10px; }
 
+.LoginScreen {
+  text-align: center; }
+  .LoginScreen .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; }
+    .LoginScreen .buttons button {
+      align-self: stretch;
+      border-radius: 2px;
+      font-size: 16px;
+      margin: 10px;
+      padding: 20px; }
+
 .Messenger {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px 30px; }
+  padding: 20px 30px;
+  max-width: 1000px;
+  margin: 0 auto; }
   .Messenger .overlay {
     background-color: rgba(0, 0, 0, 0);
     transition: 250ms; }
@@ -48,7 +63,7 @@ button {
       background-color: rgba(0, 0, 0, 0.8); }
   .Messenger .messages {
     border: 1px solid #F6FEE1;
-    background-color: #E2F0D7;
+    background-color: #F6FEE1;
     flex-grow: 1;
     overflow: auto;
     display: flex;
@@ -77,12 +92,13 @@ button {
     margin: 10px 5px;
     padding: 10px; }
     .Messenger .message.sender {
-      background-color: #BED588;
+      background-color: #95AA66;
       color: #ffffff;
       text-align: right;
       align-self: flex-end; }
     .Messenger .message.recipient {
-      color: #BED588;
+      background-color: #E2F0D7;
+      color: #10232B;
       align-self: flex-start; }
   .Messenger h1 {
     text-align: center; }
@@ -102,7 +118,21 @@ button {
     left: -300px; }
   .UserList .search-bar {
     padding: 20px;
-    border-bottom: 1px solid #F6FEE1; }
+    border-bottom: 1px solid #F6FEE1;
+    display: flex;
+    justify-content: space-between; }
+    .UserList .search-bar input {
+      border: 1px solid #10232B;
+      font-size: 14px;
+      flex-grow: 1;
+      padding: 5px;
+      border-radius: 4px; }
+    .UserList .search-bar button {
+      background-color: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 30px;
+      margin-left: 10px; }
   .UserList .user {
     border-bottom: 1px solid #F6FEE1;
     cursor: pointer;

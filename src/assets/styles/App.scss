@@ -25,3 +25,19 @@
     }
   }
 }
+
+.LoginScreen {
+  text-align: center;
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    button {
+      align-self: stretch;
+      border-radius: 2px;
+      font-size: 16px;
+      margin: 10px;
+      padding: 20px;
+    }
+  }
+}

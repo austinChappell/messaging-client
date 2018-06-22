@@ -68,7 +68,7 @@ class UserList extends Component {
         <div className="search-bar">
           <input
             onChange={evt => this.handleChange(evt)}
-            placeholder="Search..."
+            placeholder="Search users or messages..."
             value={searchValue}
           />
           <button
