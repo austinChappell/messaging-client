@@ -11,12 +11,16 @@ class Messenger extends Component {
 
     this.state = {
       content: '',
+      friendTyping: false,
     }
+  }
+
+  componentDidMount() {
+    this.subscribe();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.getUser.user !== this.props.getUser.user) {
-      this.subscribe();
       if (this.lastMsg) {
         this.scrollDown();
       }
@@ -29,7 +33,20 @@ class Messenger extends Component {
   }
 
   handleChange = (evt) => {
-    this.setState({ content: evt.target.value });
+    clearTimeout(this.keepTying);
+
+    const { selectedUser, socket, user } = this.props;
+    const data = {
+      recipientId: selectedUser,
+      userId: user.id,
+    }
+
+    this.setState({ content: evt.target.value }, () => {
+      socket.emit('SEND_TYPING', data)
+      this.keepTying = setTimeout(() => {
+        socket.emit('STOP_TYPING', data);
+      }, 3000);
+    });
   }
 
   scrollDown = () => {
@@ -46,7 +63,15 @@ class Messenger extends Component {
     const {
       user,
       selectedUser,
+      socket,
     } = this.props;
+
+    const data = {
+      recipientId: selectedUser,
+      userId: user.id,
+    }
+
+    socket.emit('STOP_TYPING', data);
 
     this.setState({
       content: '',
@@ -72,19 +97,55 @@ class Messenger extends Component {
   }
 
   subscribe = () => {
-    this.props.socket.on('RECEIVE_MESSAGE', (data) => {
-      const recipientId = data.message.data.addMessage.recipient_id;
+    const { socket } = this.props;
+
+    socket.on('RECEIVE_TYPING', (data) => {
+      const {
+        recipientId,
+        userId,
+      } = data;
+
+      // this must be defined in the callback, not the same time as socket
+      const { selectedUser, user } = this.props;
+      const senderMatch = Number(selectedUser) === userId;
+      const recipientMatch = user.id === Number(recipientId);
+
+      if (senderMatch && recipientMatch) {
+        if (!this.state.friendTyping) {
+          this.setState({ friendTyping: true }, () => {
+            this.scrollDown();
+          })
+        }
+      }
+    })
+
+    socket.on('RECEIVE_STOP_TYPING', data => {
+      if (this.state.friendTyping) {
+        this.setState({ friendTyping: false })
+      }
+    })
+    
+    socket.on('RECEIVE_MESSAGE', (data) => {
+      const message = data.message.data.addMessage;
+      const recipientId = message.recipient_id;
+      const senderId = message.sender_id;
       const userId = this.props.user.id;
+      const { selectedUser } = this.props;
+      const senderMatch = senderId === selectedUser;
+      const recipientMatch = Number(recipientId) === userId;
 
       // was sent to user
-      if (Number(recipientId) === userId) {
+      if (senderMatch && recipientMatch) {
         this.props.getUser.refetch();
       }
     })
   }
 
   render() {
-    const { content } = this.state;
+    const {
+      content,
+      friendTyping,
+    } = this.state;
     const {
       openDrawer,
       selectedUser,
@@ -96,6 +157,12 @@ class Messenger extends Component {
       fetchedUser.messages : [];
     const title = fetchedUser ?
       fetchedUser.first_name : 'Select A User';
+    
+    const typingMessage = friendTyping ? (
+      <p className="typing-message">
+        {`${title} is typing...`}
+      </p>
+    ) : null;
 
     return (
       <div className="Messenger">
@@ -118,6 +185,7 @@ class Messenger extends Component {
               </div>
             )
           })}
+          {typingMessage}
         </div>
         <form
           onSubmit={evt => this.submit(evt)}

@@ -109,6 +109,11 @@ button {
       background-color: #E2F0D7;
       color: #10232B;
       align-self: flex-start; }
+  .Messenger .typing-message {
+    color: #10232B;
+    text-align: right;
+    margin: 0;
+    padding: 5px 10px; }
   .Messenger h1 {
     text-align: center; }
 

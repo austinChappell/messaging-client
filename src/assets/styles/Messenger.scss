@@ -66,6 +66,12 @@
       align-self: flex-start;
     }
   }
+  .typing-message {
+    color: $dark;
+    text-align: right;
+    margin: 0;
+    padding: 5px 10px;
+  }
   h1 {
     text-align: center;
   }
