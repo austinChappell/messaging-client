@@ -5,6 +5,7 @@ import FontAwesome from 'react-fontawesome';
 import { ApolloProvider } from 'react-apollo';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { GoogleLogin } from 'react-google-login';
+import io from 'socket.io-client';
 
 import authAPI from '../api/auth';
 
@@ -34,6 +35,11 @@ class App extends Component {
     if (token) {
       this.loginUser(token);
     }
+    this.socket = io(REACT_APP_SERVER_URL);
+
+    this.socket.on('connect', () => {
+      console.log('CONNECTED');
+    })
   }
 
   fbLogin = async (user) => {
@@ -107,6 +113,7 @@ class App extends Component {
             <Messenger
               openDrawer={openDrawer}
               selectedUser={selectedUser}
+              socket={this.socket}
               user={user}
             />
           </div>

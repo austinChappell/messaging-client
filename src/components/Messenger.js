@@ -15,6 +15,7 @@ class Messenger extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.getUser.user !== this.props.getUser.user) {
+      this.subscribe();
       if (this.lastMsg) {
         this.scrollDown();
       }
@@ -48,8 +49,8 @@ class Messenger extends Component {
 
     this.setState({
       content: '',
-    }, () => {
-      this.props.mutate({
+    }, async () => {
+      const result = await this.props.mutate({
         variables: {
           content,
           recipient_id: selectedUser,
@@ -65,7 +66,20 @@ class Messenger extends Component {
           }
         ]
       });
+      this.props.socket.emit('SEND_MESSAGE', { message: result })
     });
+  }
+
+  subscribe = () => {
+    this.props.socket.on('RECEIVE_MESSAGE', (data) => {
+      const recipientId = data.message.data.addMessage.recipient_id;
+      const userId = this.props.user.id;
+
+      // was sent to user
+      if (Number(recipientId) === userId) {
+        this.props.getUser.refetch();
+      }
+    })
   }
 
   render() {
