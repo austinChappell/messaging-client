@@ -5,9 +5,15 @@ import FontAwesome from 'react-fontawesome';
 import queries from '../queries/';
 import helpers from '../helpers/';
 
-const { getUsers, myUnreadMessages } = queries;
+const {
+  getUsers,
+  myUnreadMessages,
+} = queries;
 
-const { getUnread, searchMessages, truncate } = helpers;
+const {
+  searchMessages,
+  truncate,
+} = helpers;
 
 class UserList extends Component {
   state = {
@@ -18,21 +24,6 @@ class UserList extends Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.openDrawer && this.props.openDrawer) {
       this.props.getUsers.refetch();
-    }
-    if (this.props.unreadMessages.myUnreadMessages) {
-      const prevMsgs = prevProps.unreadMessages.myUnreadMessages ? 
-        prevProps.unreadMessages.myUnreadMessages : [];
-      const currMsgs = this.props.unreadMessages.myUnreadMessages;
-      const numChanged = prevMsgs.length !== currMsgs.length;
-      const newUnread = numChanged && currMsgs.length > 0;
-      const allRead = numChanged && currMsgs.length == 0;
-      console.log('ALL READ', currMsgs);
-
-      if (newUnread) {
-        this.props.notify(true);
-      } else if (allRead) {
-        this.props.notify(false);
-      }
     }
   }
 
@@ -59,7 +50,11 @@ class UserList extends Component {
   }
 
   render() {
-    const { searchResults, searchValue } = this.state;
+    const {
+      searchResults,
+      searchValue,
+    } = this.state;
+
     const {
       getUsers: data,
       openDrawer,
@@ -68,7 +63,7 @@ class UserList extends Component {
       user,
     } = this.props;
 
-    const {myUnreadMessages} = unreadMessages;
+    const { myUnreadMessages } = unreadMessages;
 
     const ids = myUnreadMessages ?
       myUnreadMessages
@@ -86,8 +81,15 @@ class UserList extends Component {
       )
     }
 
-    const userListClassName = openDrawer ? "UserList open" : "UserList closed";
-    const users = isFiltering ? searchResults : data.users;
+    const userListClassName = openDrawer ?
+      "UserList open"
+      :
+      "UserList closed";
+
+    const users = isFiltering ?
+      searchResults
+      :
+      data.users;
 
     return (
       <div className={userListClassName}>
@@ -106,22 +108,29 @@ class UserList extends Component {
 
         {users.map(u => {
           const hasUnread = ids.includes(Number(u.id));
+
           const notificationDot = hasUnread ?
-          (
-            <FontAwesome
-              name="circle"
-              style={{
-                color : '#ff0000',
-                fontSize: 12,
-              }}
-            />
-          ) : null;
+            (
+              <FontAwesome
+                name="circle"
+                style={{
+                  color : '#ff0000',
+                  fontSize: 12,
+                }}
+              />
+            ) : null;
         
-          if (Number(u.id) == user.id) {
+          if (Number(u.id) === user.id) {
             return null;
           }
+
           const message = u.last_message ? u.last_message.content : '';
-          const userClassName = u.id === selectedUser ? "user active" : "user";
+
+          const userClassName = u.id === selectedUser ?
+            "user active"
+            :
+            "user";
+            
           return (
             <div
               key={u.id}
@@ -160,5 +169,3 @@ export default compose(
     })
   })
 )(UserList)
-
-

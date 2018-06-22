@@ -69,20 +69,6 @@ class Messenger extends Component {
 
   scrollDown = () => {
     this.lastMsg.scrollIntoView({ behavior: 'smooth' });
-    const { selectedUser, user } = this.props;
-    // this.props.readMessages({
-    //   variables: {
-    //     recipient_id: user.id,
-    //     sender_id: selectedUser,
-    //   },
-      // refetchQueries: [
-      //   { query: myUnreadMessages,
-      //     variables: {
-      //       id: user.id,
-      //     }
-      //   },
-      // ]
-    // });
   }
 
   submit = (evt) => {
