@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
+import FontAwesome from 'react-fontawesome';
 
 import { addMessage, getUser } from '../queries/';
 
@@ -131,7 +132,7 @@ class Messenger extends Component {
             <button
               disabled={!selectedUser}
             >
-              Send
+              <FontAwesome name="paper-plane" />
             </button>
           </div>
         </form>

@@ -24,6 +24,7 @@ const client = new ApolloClient({
 
 class App extends Component {
   state = {
+    checkedToken: false,
     loggedIn: false,
     openDrawer: false,
     selectedUser: null,
@@ -34,12 +35,18 @@ class App extends Component {
     const token = localStorage.getItem('token');
     if (token) {
       this.loginUser(token);
+    } else {
+      this.checkedToken();
     }
     this.socket = io(REACT_APP_SERVER_URL);
 
     this.socket.on('connect', () => {
       console.log('CONNECTED');
     })
+  }
+
+  checkedToken = () => {
+    this.setState({ checkedToken: true });
   }
 
   fbLogin = async (user) => {
@@ -72,7 +79,7 @@ class App extends Component {
 
   setUser = (user) => {
     localStorage.setItem('token', user.token);
-    this.setState({ loggedIn: true, user })
+    this.setState({ checkedToken: true, loggedIn: true, user });
   }
 
   toggleDrawer = () => {
@@ -81,26 +88,41 @@ class App extends Component {
 
   render() {
     const {
+      checkedToken,
       loggedIn,
       openDrawer,
       selectedUser,
       user,
     } = this.state;
 
+    if (!checkedToken) {
+      return (
+        <div className="LoginScreen">
+          <h1>Loading...</h1>
+          <h2>This may take some time due to Heroku server.</h2>
+        </div>
+      )
+    }
+
     const content = loggedIn ?
       (
         <div className="App">
           <div className="navbar">
-            <button
-              onClick={this.toggleDrawer}
-            >
-              <FontAwesome name='arrow-left' />
-            </button>
-            <button
-              onClick={this.logout}
-            >
-              <FontAwesome name='power-off' />
-            </button>
+            <div>
+              <button
+                onClick={this.toggleDrawer}
+              >
+                <FontAwesome name="bars" />
+              </button>
+            </div>
+            <div className="navbar-right">
+              <span>{user.first_name}</span>
+              <button
+                onClick={this.logout}
+              >
+                <FontAwesome name="power-off" />
+              </button>
+            </div>
           </div>
           <div className="flex-container">
             <UserList

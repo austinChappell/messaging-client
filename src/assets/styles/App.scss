@@ -24,10 +24,18 @@
       margin: 10px;
     }
   }
+  .navbar-right {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .LoginScreen {
-  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
   .buttons {
     display: flex;
     flex-wrap: wrap;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
+import FontAwesome from 'react-fontawesome';
 
 import { getUsers } from '../queries/';
 
@@ -54,7 +55,7 @@ class UserList extends Component {
 
     if (data.loading) {
       return (
-        <div className="Loading">
+        <div className="UserList Loading closed">
           <h2>Loading...</h2>
         </div>
       )
@@ -74,7 +75,7 @@ class UserList extends Component {
           <button
             onClick={this.closeDrawer}
           >
-            X
+            <FontAwesome name="times" />
           </button>
         </div>
 
