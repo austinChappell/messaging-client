@@ -2,6 +2,17 @@
   background-color: $primary-dark;
   overflow: auto;
   padding: 0;
+  position: absolute;
+  height: 100vh;
+  transition: 500ms;
+  width: 300px;
+  z-index: 1;
+  &.open {
+    left: 0;
+  }
+  &.closed {
+    left: -300px;
+  }
   .search-bar {
     padding: 20px;
     border-bottom: 1px solid $light;

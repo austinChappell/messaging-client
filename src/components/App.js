@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
+
 import { ApolloProvider } from 'react-apollo';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { GoogleLogin } from 'react-google-login';
@@ -22,6 +23,7 @@ const client = new ApolloClient({
 class App extends Component {
   state = {
     loggedIn: false,
+    openDrawer: false,
     selectedUser: null,
     user: null,
   }
@@ -66,9 +68,14 @@ class App extends Component {
     this.setState({ loggedIn: true, user })
   }
 
+  toggleDrawer = () => {
+    this.setState({ openDrawer: !this.state.openDrawer })
+  }
+
   render() {
     const {
       loggedIn,
+      openDrawer,
       selectedUser,
       user,
     } = this.state;
@@ -78,6 +85,11 @@ class App extends Component {
         <div className="App">
           <div className="navbar">
             <button
+              onClick={this.toggleDrawer}
+            >
+              Users
+            </button>
+            <button
               onClick={this.logout}
             >
               Logout
@@ -85,11 +97,14 @@ class App extends Component {
           </div>
           <div className="flex-container">
             <UserList
+              openDrawer={openDrawer}
               selectUser={this.selectUser}
               selectedUser={selectedUser}
+              toggleDrawer={this.toggleDrawer}
               user={user}
             />
             <Messenger
+              openDrawer={openDrawer}
               selectedUser={selectedUser}
               user={user}
             />

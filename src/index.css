@@ -5,6 +5,9 @@ body {
   font-family: sans-serif;
   color: #F6FEE1; }
 
+button {
+  cursor: pointer; }
+
 .App {
   height: 100vh;
   display: flex;
@@ -17,7 +20,8 @@ body {
   .App .navbar {
     position: fixed;
     width: 100%;
-    text-align: right; }
+    display: flex;
+    justify-content: space-between; }
     .App .navbar button {
       background-color: #F6FEE1;
       border: none;
@@ -32,6 +36,16 @@ body {
   display: flex;
   flex-direction: column;
   padding: 30px; }
+  .Messenger .overlay {
+    background-color: rgba(0, 0, 0, 0);
+    transition: 250ms; }
+    .Messenger .overlay.show {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.8); }
   .Messenger .messages {
     border: 1px solid #F6FEE1;
     background-color: #E2F0D7;
@@ -73,7 +87,16 @@ body {
 .UserList {
   background-color: #95AA66;
   overflow: auto;
-  padding: 0; }
+  padding: 0;
+  position: absolute;
+  height: 100vh;
+  transition: 500ms;
+  width: 300px;
+  z-index: 1; }
+  .UserList.open {
+    left: 0; }
+  .UserList.closed {
+    left: -300px; }
   .UserList .search-bar {
     padding: 20px;
     border-bottom: 1px solid #F6FEE1; }

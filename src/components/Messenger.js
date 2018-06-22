@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
 
-import { addMessage, getUser, getUsers } from '../queries/';
+import { addMessage, getUser } from '../queries/';
 
 class Messenger extends Component {
   constructor(props) {
@@ -19,10 +19,11 @@ class Messenger extends Component {
         this.scrollDown();
       }
     }
-  }
 
-  getMessages = (id) => {
-    
+    // drawer is closing
+    if (prevProps.openDrawer && !this.props.openDrawer) {
+      this.props.getUser.refetch();
+    }
   }
 
   handleChange = (evt) => {
@@ -39,37 +40,43 @@ class Messenger extends Component {
     const {
       content,
     } = this.state;
+    
     const {
       user,
       selectedUser,
     } = this.props;
 
-    this.props.mutate({
-      variables: {
-        content,
-        recipient_id: selectedUser,
-        sender_id: user.id,
-      },
-      refetchQueries: [
-        {
-          query: getUsers,
-          variables: { id: user.id },
+    this.setState({
+      content: '',
+    }, () => {
+      this.props.mutate({
+        variables: {
+          content,
+          recipient_id: selectedUser,
+          sender_id: user.id,
         },
-        {
-          query: getUser,
-          variables: {
-            id: selectedUser,
-            self: user.id,
+        refetchQueries: [
+          {
+            query: getUser,
+            variables: {
+              id: selectedUser,
+              self: user.id,
+            }
           }
-        }
-      ]
+        ]
+      });
     });
-    this.setState({ content: '' })
   }
 
   render() {
+    console.log('MESSENGER', this.props)
     const { content } = this.state;
-    const { selectedUser, user } = this.props;
+    const {
+      openDrawer,
+      selectedUser,
+      user,
+    } = this.props;
+
     const fetchedUser = this.props.getUser.user;
     const messages = fetchedUser ?
       fetchedUser.messages : [];
@@ -78,6 +85,8 @@ class Messenger extends Component {
 
     return (
       <div className="Messenger">
+        <div className={openDrawer ? 'overlay show' : 'overlay'}>
+        </div>
         <h1>{title}</h1>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {

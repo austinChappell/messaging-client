@@ -12,7 +12,8 @@
   .navbar {
     position: fixed;
     width: 100%;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
     button {
       background-color: $light;
       border: none;

@@ -13,6 +13,16 @@ class UserList extends Component {
     searchValue: '',
   }
 
+  componentDidUpdate(prevProps) {
+    if (!prevProps.openDrawer && this.props.openDrawer) {
+      this.props.data.refetch();
+    }
+  }
+
+  closeDrawer = () => {
+    this.props.toggleDrawer();
+  }
+
   handleChange = (evt) => {
     this.setState({ searchValue: evt.target.value }, () => {
       this.search();
@@ -26,16 +36,22 @@ class UserList extends Component {
     this.setState({ searchResults });
   }
 
-  render() {
-    const { searchResults, searchValue } = this.state;
-    const isFiltering = searchValue.trim() !== '';
+  selectUser = (id) => {
+    this.props.selectUser(id);
+    this.closeDrawer();
+  }
 
+  render() {
+    console.log('USERLIST RENDER')
+    const { searchResults, searchValue } = this.state;
     const {
       data,
-      selectUser,
+      openDrawer,
       selectedUser,
       user,
     } = this.props;
+
+    const isFiltering = searchValue.trim() !== '';
 
     if (data.loading) {
       return (
@@ -45,16 +61,22 @@ class UserList extends Component {
       )
     }
 
+    const userListClassName = openDrawer ? "UserList open" : "UserList closed";
     const users = isFiltering ? searchResults : data.users;
 
     return (
-      <div className="UserList">
+      <div className={userListClassName}>
         <div className="search-bar">
           <input
             onChange={evt => this.handleChange(evt)}
             placeholder="Search..."
             value={searchValue}
           />
+          <button
+            onClick={this.closeDrawer}
+          >
+            X
+          </button>
         </div>
 
         {users.map(u => {
@@ -67,7 +89,7 @@ class UserList extends Component {
             <div
               key={u.id}
               className={userClassName}
-              onClick={() => selectUser(u.id)}
+              onClick={() => this.selectUser(u.id)}
             >
               <h4>
                 {`${u.first_name} ${u.last_name}`}
