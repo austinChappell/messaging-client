@@ -22,6 +22,8 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
+    // firefox hack
+    height: 100px;
   }
   .message-input {
     display: flex;
