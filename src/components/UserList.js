@@ -26,6 +26,7 @@ class UserList extends Component {
       const numChanged = prevMsgs.length !== currMsgs.length;
       const newUnread = numChanged && currMsgs.length > 0;
       const allRead = numChanged && currMsgs.length == 0;
+      console.log('ALL READ', currMsgs);
 
       if (newUnread) {
         this.props.notify(true);

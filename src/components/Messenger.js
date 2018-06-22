@@ -38,13 +38,13 @@ class Messenger extends Component {
             recipient_id: user.id,
             sender_id: selectedUser,
           },
-          // refetchQueries: [
-          //   { query: myUnreadMessages,
-          //     variables: {
-          //       id: user.id,
-          //     }
-          //   },
-          // ]
+          refetchQueries: [
+            { query: myUnreadMessages,
+              variables: {
+                id: user.id,
+              }
+            },
+          ]
         });
       }, 1000)
     }
@@ -174,7 +174,6 @@ class Messenger extends Component {
   }
 
   render() {
-    console.log('MESSENGER PROPS', this.props);
     const {
       content,
       friendTyping,
@@ -182,8 +181,13 @@ class Messenger extends Component {
     const {
       openDrawer,
       selectedUser,
+      unreadMessages,
       user,
     } = this.props;
+
+    const { myUnreadMessages: unread } = unreadMessages;
+    const hasUnread = unread && unread.length > 0;
+    console.log('HAS UNREAD', hasUnread);
 
     const fetchedUser = this.props.getUser.user;
     const messages = fetchedUser ?
@@ -197,11 +201,44 @@ class Messenger extends Component {
       </p>
     ) : null;
 
+    const notificationDot = hasUnread ?
+    (
+      <FontAwesome
+        name="circle"
+        style={{
+          color : '#ff0000',
+          fontSize: 12,
+        }}
+      />
+    ) : null;
+
     return (
       <div className="Messenger">
+        <div className="navbar">
+          <div>
+            <button
+              onClick={this.props.toggleDrawer}
+              style={{ display: 'flex', alignItems: 'flex-start' }}
+            >
+              <FontAwesome name="bars" />
+              {notificationDot}
+            </button>
+          </div>
+
+          <h1>{title}</h1>
+
+          <div className="navbar-right">
+            <span>{user.first_name}</span>
+            <button
+              onClick={this.props.logout}
+            >
+              <FontAwesome name="power-off" />
+            </button>
+          </div>
+        </div>
+
         <div className={openDrawer ? 'overlay show' : 'overlay'}>
         </div>
-        <h1>{title}</h1>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
             const isSender = user.id === Number(msg.sender_id);
@@ -255,4 +292,12 @@ export default compose(
     })
   }),
   graphql(readMessages, { name: 'readMessages' }),
+  graphql(myUnreadMessages, {
+    name: 'unreadMessages',
+    options: props => ({
+      variables: {
+        id: props.user.id,
+      }
+    })
+  })
 )(Messenger);

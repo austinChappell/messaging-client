@@ -124,25 +124,6 @@ class App extends Component {
     const content = loggedIn ?
       (
         <div className="App">
-          <div className="navbar">
-            <div>
-              <button
-                onClick={this.toggleDrawer}
-                style={{ display: 'flex', alignItems: 'flex-start' }}
-              >
-                <FontAwesome name="bars" />
-                {notificationDot}
-              </button>
-            </div>
-            <div className="navbar-right">
-              <span>{user.first_name}</span>
-              <button
-                onClick={this.logout}
-              >
-                <FontAwesome name="power-off" />
-              </button>
-            </div>
-          </div>
           <div className="flex-container">
             <UserList
               notify={this.notify}
@@ -153,9 +134,11 @@ class App extends Component {
               user={user}
             />
             <Messenger
+              logout={this.logout}
               openDrawer={openDrawer}
               selectedUser={selectedUser}
               socket={this.socket}
+              toggleDrawer={this.toggleDrawer}
               user={user}
             />
           </div>
