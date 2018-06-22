@@ -10,4 +10,12 @@
       padding: 30px;
     }
   }
+  .navbar {
+    position: fixed;
+    width: 100%;
+    text-align: right;
+    button {
+      margin: 10px;
+    }
+  }
 }

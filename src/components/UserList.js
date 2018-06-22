@@ -29,23 +29,24 @@ class UserList extends Component {
       <div className="UserList">
         <h1>User List</h1>
         {users.map(u => {
-          if (Number(u.id) !== user.id) {
-            const message = u.last_message ? u.last_message.content : '';
-            return (
-              <div
-                key={u.id}
-                className="user"
-                onClick={() => selectUser(u.id)}
-              >
-                <h4>
-                  {`${u.first_name} ${u.last_name}`}
-                </h4>
-                <p>
-                  {truncate(message, 20)}
-                </p>
-              </div>
-            )
+          if (Number(u.id) === user.id) {
+            return null;
           }
+          const message = u.last_message ? u.last_message.content : '';
+          return (
+            <div
+              key={u.id}
+              className="user"
+              onClick={() => selectUser(u.id)}
+            >
+              <h4>
+                {`${u.first_name} ${u.last_name}`}
+              </h4>
+              <p>
+                {truncate(message, 20)}
+              </p>
+            </div>
+          )
         })}
       </div>
     )

@@ -6,6 +6,7 @@ import { addMessage, getUser, getUsers } from '../queries/';
 class Messenger extends Component {
   constructor(props) {
     super(props);
+    this.messageWindow = React.createRef();
 
     this.state = {
       content: '',
@@ -13,8 +14,10 @@ class Messenger extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.selectedUser !== this.props.selectedUser) {
-      this.getMessages(this.props.selectedUser);
+    if (prevProps.getUser.user !== this.props.getUser.user) {
+      if (this.lastMsg) {
+        this.scrollDown();
+      }
     }
   }
 
@@ -26,13 +29,15 @@ class Messenger extends Component {
     this.setState({ content: evt.target.value });
   }
 
+  scrollDown = () => {
+    this.lastMsg.scrollIntoView({ behavior: 'smooth' });
+  }
+
   submit = (evt) => {
     evt.preventDefault();
 
     const {
       content,
-      recipientId,
-      senderId,
     } = this.state;
     const {
       user,
@@ -72,15 +77,17 @@ class Messenger extends Component {
     return (
       <div className="Messenger">
         <h1>Messenger</h1>
-        <div className="messages">
-          {messages.map(msg => {
+        <div className="messages" ref={this.messageWindow}>
+          {messages.map((msg, index) => {
             const isSender = user.id === Number(msg.sender_id);
+            const lastMsg = index === messages.length - 1;
             const messageClass = isSender ?
               'message sender' : 'message recipient';
             return (
               <div
                 key={msg.id}
                 className={messageClass}
+                ref={lastMsg ? (el) => this.lastMsg = el : false}
               >
                 {msg.content}
               </div>
