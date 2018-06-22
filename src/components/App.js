@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
+import FontAwesome from 'react-fontawesome';
 
 import { ApolloProvider } from 'react-apollo';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -87,12 +88,12 @@ class App extends Component {
             <button
               onClick={this.toggleDrawer}
             >
-              Users
+              <FontAwesome name='arrow-left' />
             </button>
             <button
               onClick={this.logout}
             >
-              Logout
+              <FontAwesome name='power-off' />
             </button>
           </div>
           <div className="flex-container">

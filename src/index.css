@@ -23,11 +23,11 @@ button {
     display: flex;
     justify-content: space-between; }
     .App .navbar button {
-      background-color: #F6FEE1;
+      background-color: transparent;
       border: none;
       border-radius: 5px;
-      color: #10232B;
-      font-size: 16px;
+      color: #F6FEE1;
+      font-size: 26px;
       padding: 5px 10px;
       margin: 10px; }
 
@@ -35,7 +35,7 @@ button {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 30px; }
+  padding: 20px 30px; }
   .Messenger .overlay {
     background-color: rgba(0, 0, 0, 0);
     transition: 250ms; }
@@ -83,6 +83,8 @@ button {
     .Messenger .message.recipient {
       color: #BED588;
       align-self: flex-start; }
+  .Messenger h1 {
+    text-align: center; }
 
 .UserList {
   background-color: #95AA66;

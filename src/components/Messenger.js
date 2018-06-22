@@ -69,7 +69,6 @@ class Messenger extends Component {
   }
 
   render() {
-    console.log('MESSENGER', this.props)
     const { content } = this.state;
     const {
       openDrawer,
@@ -110,6 +109,7 @@ class Messenger extends Component {
         >
           <div className="message-input">
             <input
+              disabled={!selectedUser}
               placeholder="Type your message here..."
               onChange={evt => this.handleChange(evt)}
               value={content}

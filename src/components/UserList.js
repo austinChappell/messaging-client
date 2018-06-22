@@ -42,7 +42,6 @@ class UserList extends Component {
   }
 
   render() {
-    console.log('USERLIST RENDER')
     const { searchResults, searchValue } = this.state;
     const {
       data,
