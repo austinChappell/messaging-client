@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
 
 import { ApolloProvider } from 'react-apollo';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { GoogleLogin } from 'react-google-login';
 import io from 'socket.io-client';
 
@@ -41,7 +41,7 @@ class App extends Component {
 
     this.socket.on('connect', () => {
       console.log('CONNECTED');
-    })
+    });
   }
 
   checkedToken = () => {
@@ -64,7 +64,7 @@ class App extends Component {
       loggedIn: false,
       selectedUser: null,
       user: null,
-    })
+    });
   }
 
   googleLogin = async (user) => {
@@ -73,7 +73,7 @@ class App extends Component {
   }
 
   selectUser = (id) => {
-    this.setState({ selectedUser: id })
+    this.setState({ selectedUser: id });
   }
 
   setUser = (user) => {
@@ -82,7 +82,8 @@ class App extends Component {
   }
 
   toggleDrawer = () => {
-    this.setState({ openDrawer: !this.state.openDrawer })
+    const { openDrawer } = this.state;
+    this.setState({ openDrawer: !openDrawer });
   }
 
   render() {
@@ -97,14 +98,18 @@ class App extends Component {
     if (!checkedToken) {
       return (
         <div className="LoginScreen">
-          <h1>Loading...</h1>
-          <h2>This may take some time due to Heroku server.</h2>
+          <h1>
+            Loading...
+          </h1>
+          <h2>
+            This may take some time due to Heroku server.
+          </h2>
         </div>
-      )
+      );
     }
 
-    const content = loggedIn ?
-      (
+    const content = loggedIn
+      ? (
         <div className="App">
           <div className="flex-container">
             <UserList
@@ -125,10 +130,11 @@ class App extends Component {
           </div>
         </div>
       )
-      :
-      (
+      : (
         <div className="LoginScreen">
-          <h1>My GraphQL Chat App</h1>
+          <h1>
+            My GraphQL Chat App
+          </h1>
 
           <div className="buttons">
             <FacebookLogin
@@ -142,6 +148,7 @@ class App extends Component {
                     backgroundColor: '#3C5B97',
                     color: '#ffffff',
                   }}
+                  type="button"
                 >
                   Login with Facebook
                 </button>
@@ -167,7 +174,7 @@ class App extends Component {
       <ApolloProvider client={client}>
         {content}
       </ApolloProvider>
-    )
+    );
   }
 }
 

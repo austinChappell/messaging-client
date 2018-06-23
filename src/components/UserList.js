@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
 
-import queries from '../queries/';
-import helpers from '../helpers/';
+import queries from '../queries';
+import helpers from '../helpers';
 
 const {
   getUsers,
@@ -15,6 +16,20 @@ const {
   truncate,
 } = helpers;
 
+const propTypes = {
+  fetchUsers: PropTypes.objectOf(PropTypes.any).isRequired,
+  openDrawer: PropTypes.bool.isRequired,
+  selectedUser: PropTypes.string,
+  selectUser: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+  unreadMessages: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+const defaultProps = {
+  selectedUser: null,
+};
+
 class UserList extends Component {
   state = {
     searchResults: [],
@@ -22,13 +37,18 @@ class UserList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.openDrawer && this.props.openDrawer) {
-      this.props.getUsers.refetch();
+    const {
+      fetchUsers,
+      openDrawer,
+    } = this.props;
+    if (!prevProps.openDrawer && openDrawer) {
+      fetchUsers.refetch();
     }
   }
 
   closeDrawer = () => {
-    this.props.toggleDrawer();
+    const { toggleDrawer } = this.props;
+    toggleDrawer();
   }
 
   handleChange = (evt) => {
@@ -38,14 +58,16 @@ class UserList extends Component {
   }
 
   search = () => {
-    const { users } = this.props.getUsers;
+    const { fetchUsers } = this.props;
+    const { users } = fetchUsers;
     const { searchValue } = this.state;
     const searchResults = searchMessages(users, searchValue);
     this.setState({ searchResults });
   }
 
   selectUser = (id) => {
-    this.props.selectUser(id);
+    const { selectUser } = this.props;
+    selectUser(id);
     this.closeDrawer();
   }
 
@@ -56,40 +78,39 @@ class UserList extends Component {
     } = this.state;
 
     const {
-      getUsers: data,
+      fetchUsers: data,
       openDrawer,
       selectedUser,
       unreadMessages,
       user,
     } = this.props;
 
-    const { myUnreadMessages } = unreadMessages;
+    const { myUnreadMessages: unread } = unreadMessages;
 
-    const ids = myUnreadMessages ?
-      myUnreadMessages
+    const ids = unread
+      ? unread
         .map(m => Number(m.sender_id))
-      :
-      [];
-    
+      : [];
+
     const isFiltering = searchValue.trim() !== '';
 
     if (data.loading) {
       return (
         <div className="UserList Loading closed">
-          <h2>Loading...</h2>
+          <h2>
+            Loading...
+          </h2>
         </div>
-      )
+      );
     }
 
-    const userListClassName = openDrawer ?
-      "UserList open"
-      :
-      "UserList closed";
+    const userListClassName = openDrawer
+      ? 'UserList open'
+      : 'UserList closed';
 
-    const users = isFiltering ?
-      searchResults
-      :
-      data.users;
+    const users = isFiltering
+      ? searchResults
+      : data.users;
 
     return (
       <div className={userListClassName}>
@@ -101,71 +122,91 @@ class UserList extends Component {
           />
           <button
             onClick={this.closeDrawer}
+            type="button"
           >
             <FontAwesome name="times" />
           </button>
         </div>
 
-        {users.map(u => {
+        {users.map((u) => {
           const hasUnread = ids.includes(Number(u.id));
 
-          const notificationDot = hasUnread ?
-            (
+          const notificationDot = hasUnread
+            ? (
               <FontAwesome
                 name="circle"
                 style={{
-                  color : '#ff0000',
+                  color: '#ff0000',
                   fontSize: 12,
                 }}
               />
             ) : null;
-        
+
           if (Number(u.id) === user.id) {
             return null;
           }
 
           const message = u.last_message ? u.last_message.content : '';
 
-          const userClassName = u.id === selectedUser ?
-            "user active"
-            :
-            "user";
+          const userClassName = u.id === selectedUser
+            ? 'user active'
+            : 'user';
 
           return (
             <div
               key={u.id}
               className={userClassName}
               onClick={() => this.selectUser(u.id)}
+              onKeyDown={(evt) => {
+                if (evt.keyCode === 13) {
+                  this.selectUser(u.id);
+                }
+              }}
+              role="button"
+              tabIndex="0"
             >
               <h4>
-                {notificationDot} {`${u.first_name} ${u.last_name}`}
+                {notificationDot}
+                {' '}
+                {`${u.first_name} ${u.last_name}`}
               </h4>
               <p>
                 {truncate(message, 20)}
               </p>
             </div>
-          )
+          );
         })}
       </div>
-    )
+    );
   }
 }
 
+UserList.propTypes = propTypes;
+UserList.defaultProps = defaultProps;
+
 export default compose(
   graphql(getUsers, {
-    name: 'getUsers',
-    options: props => ({
-      variables: {
-        id: props.user.id,
-      }
-    })
+    name: 'fetchUsers',
+    options: (props) => {
+      const { user } = props;
+      const { id } = user;
+      return {
+        variables: {
+          id,
+        },
+      };
+    },
   }),
   graphql(myUnreadMessages, {
     name: 'unreadMessages',
-    options: props => ({
-      variables: {
-        id: props.user.id,
-      }
-    })
-  })
-)(UserList)
+    options: (props) => {
+      const { user } = props;
+      const { id } = user;
+      return {
+        variables: {
+          id,
+        },
+      };
+    },
+  }),
+)(UserList);
