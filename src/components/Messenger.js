@@ -147,18 +147,34 @@ class Messenger extends Component {
       const message = data.message.data.addMessage;
       const recipientId = message.recipient_id;
       const senderId = message.sender_id;
-      const userId = this.props.user.id;
-      const { selectedUser } = this.props;
+      const { user, selectedUser } = this.props;
+      const userId = user.id;
       const senderMatch = senderId === selectedUser;
       const recipientMatch = Number(recipientId) === userId;
 
-      if (recipientMatch) {
+      if (recipientMatch && !senderMatch) {
+        // if was sent user but message not open
         this.props.unreadMessages.refetch();
       }
 
       // was sent to user
       if (senderMatch && recipientMatch) {
         this.props.getUser.refetch();
+        setTimeout(() => {
+          this.props.readMessages({
+            variables: {
+              recipient_id: user.id,
+              sender_id: selectedUser,
+            },
+            refetchQueries: [
+              { query: myUnreadMessages,
+                variables: {
+                  id: user.id,
+                }
+              },
+            ]
+          });
+        }, 1000)  
       }
     })
   }
