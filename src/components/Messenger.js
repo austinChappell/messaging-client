@@ -1,5 +1,5 @@
 // dependencies
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
@@ -279,6 +279,9 @@ class Messenger extends Component {
       user,
     } = this.props;
 
+    // this will be used to avoid printing duplicate dates
+    this.day = null;
+
     const { myUnreadMessages: unread } = unreadMessages; // array of unread messages
     const hasUnread = unread && unread.length > 0; // unread messages exist for user
     const { user: fetchedUser } = fetchUser; // user info which contains messages
@@ -310,7 +313,7 @@ class Messenger extends Component {
     return (
       <div className="Messenger">
         <div className="navbar">
-          <div>
+          <div className="navbar-left">
             <button
               onClick={toggleDrawer}
               style={{
@@ -347,25 +350,60 @@ class Messenger extends Component {
         </p>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
-            console.log('MESSAGE', msg);
+            // display local time
             const time = moment(msg.timestamp).format('LT');
-            console.log('TIME', time);
+
+            // get day
+            const day = moment(msg.timestamp).format('LL');
+            console.log('DAY', day);
+            const today = moment().format('LL');
+
+            const isToday = day === today;
+            const firstMessageOfDay = day !== this.day;
+
+            this.day = day;
+
+            let dateTitle;
+
+            if (firstMessageOfDay && isToday) {
+              dateTitle = 'Today';
+            } else if (firstMessageOfDay) {
+              dateTitle = day;
+            } else {
+              dateTitle = null;
+            }
+
+            const displayDate = dateTitle !== null
+              ? (
+                <div className="display-date">
+                  <hr />
+                  <span>
+                    {dateTitle}
+                  </span>
+                  <hr />
+                </div>
+              ) : null;
+
+            console.log('DISPLAY DATE', displayDate);
+
             const isSender = user.id === Number(msg.sender_id);
             const lastMsg = index === messages.length - 1;
             const senderClass = isSender ? 'sender' : 'recipient';
             return (
-              <div
-                key={msg.id}
-                className={`message ${senderClass}`}
-                ref={lastMsg ? el => this.lastMsg = el : false}
-              >
-                <span className="time">
-                  {time}
-                </span>
-                <div className={`message-content ${senderClass}`}>
-                  {msg.content}
+              <Fragment key={msg.id}>
+                {displayDate}
+                <div
+                  className={`message ${senderClass}`}
+                  ref={lastMsg ? el => this.lastMsg = el : false}
+                >
+                  <span className="time">
+                    {time}
+                  </span>
+                  <div className={`message-content ${senderClass}`}>
+                    {msg.content}
+                  </div>
                 </div>
-              </div>
+              </Fragment>
             );
           })}
         </div>

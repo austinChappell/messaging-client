@@ -12,7 +12,11 @@
   .navbar {
     align-items: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    & > div {
+      width: 50%;
+      flex-shrink: 1;
+    }
     button {
       background-color: transparent;
       border: none;
@@ -26,6 +30,7 @@
   .navbar-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 }
 

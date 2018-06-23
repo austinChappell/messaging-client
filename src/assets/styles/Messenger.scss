@@ -55,6 +55,22 @@
       cursor: not-allowed;
     }
   }
+  .display-date {
+    color: $black;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    margin: 0 15px;
+    align-items: center;
+    span {
+      margin: 0 15px;
+    }
+    hr {
+      flex-grow: 1;
+      border-bottom: none;
+      height: 0px;
+    }
+  }
   .message {
     .time {
       color: $dark;
@@ -73,7 +89,7 @@
   .message-content {
       margin: 0 5px 10px;
       border-radius: 5px;
-      border: 1px solid $color-black;
+      border: 1px solid $black;
       max-width: 80%;
       padding: 10px;
       &.sender {
