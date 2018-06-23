@@ -18,6 +18,8 @@ const {
   fbAuth,
   googleAuth,
   loginUser,
+  login,
+  signUp,
 } = authAPI;
 
 // server url
@@ -33,6 +35,11 @@ const client = new ApolloClient({
 class App extends Component {
   state = {
     checkedToken: false, // false until server has checked token
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     loggedIn: false,
     openDrawer: false,
     selectedUser: null, // will be a user id if not null
@@ -69,8 +76,32 @@ class App extends Component {
     this.setUser(loginResults);
   }
 
+  handleChange = (evt, key) => {
+    const { value } = evt.target;
+    const o = {};
+    o[key] = value;
+    this.setState(o);
+  }
+
+  login = async (evt) => {
+    evt.preventDefault();
+    const {
+      email,
+      password,
+    } = this.state;
+    const body = {
+      email,
+      password,
+    };
+    const user = await login(body);
+    console.log('USER', user);
+    this.setUser(user);
+  }
+
   loginUser = async (token) => {
+    console.log('TOKEN', token);
     const loginResults = await loginUser(token);
+    console.log('RSULTS', loginResults);
     if (loginResults.error) {
       // set checkToken to true, but do not log them in
       this.checkedToken();
@@ -104,6 +135,25 @@ class App extends Component {
     });
   }
 
+  submit = async (evt) => {
+    evt.preventDefault();
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+    } = this.state;
+    const body = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+    const result = await signUp(body);
+    console.log('RESULT', result);
+  }
+
   // open and close user list
   toggleDrawer = () => {
     const { openDrawer } = this.state;
@@ -117,6 +167,11 @@ class App extends Component {
       openDrawer,
       selectedUser,
       user,
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
     } = this.state;
 
     // loader prior to token check
@@ -163,35 +218,78 @@ class App extends Component {
             My GraphQL Chat App
           </h1>
 
-          <div className="buttons">
-            <FacebookLogin
-              appId="1815948175379229"
-              callback={this.fbLogin}
-              fields="name,email"
-              render={renderProps => (
-                <button
-                  onClick={renderProps.onClick}
-                  style={{
-                    backgroundColor: '#3C5B97',
-                    color: '#ffffff',
-                  }}
-                  type="button"
-                >
-                  Login with Facebook
-                </button>
-              )}
-            />
+          <div className="sign-up">
+            <form
+              onSubmit={evt => this.submit(evt)}
+            >
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'firstName')}
+                  placeholder="First Name"
+                  value={firstName}
+                />
+              </div>
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'lastName')}
+                  placeholder="Last Name"
+                  value={lastName}
+                />
+              </div>
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'email')}
+                  placeholder="Email"
+                  type="email"
+                  value={email}
+                />
+              </div>
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'password')}
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                />
+              </div>
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'confirmPassword')}
+                  placeholder="Confirm Password"
+                  type="password"
+                  value={confirmPassword}
+                />
+              </div>
+              <button>
+                Sign Up
+              </button>
+            </form>
+          </div>
 
-            <GoogleLogin
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Login with Google"
-              onSuccess={this.googleLogin}
-              onFailure={this.googleLogin}
-              style={{
-                backgroundColor: '#DE4940',
-                color: '#ffffff',
-              }}
-            />
+          <div className="login">
+            <form
+              onSubmit={evt => this.login(evt)}
+            >
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'email')}
+                  placeholder="Email"
+                  type="email"
+                  value={email}
+                />
+              </div>
+              <div>
+                <input
+                  onChange={evt => this.handleChange(evt, 'password')}
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                />
+              </div>
+              <button>
+                Login
+              </button>
+            </form>
           </div>
 
         </div>
