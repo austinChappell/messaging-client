@@ -14,3 +14,39 @@ input {
   background-color: $light;
   border: none;
 }
+
+.center {
+  text-align: center;
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.fixed-fill {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-center-horiz {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.darken-bg {
+  background-color: rgba(0,0,0,0.9)
+}
+
+.error {
+  color: #ff0000;
+}

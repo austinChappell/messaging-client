@@ -12,6 +12,35 @@ input {
   background-color: #f5f5f5;
   border: none; }
 
+.center {
+  text-align: center; }
+
+.disabled {
+  cursor: not-allowed; }
+
+.fixed-fill {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.flex-center-horiz {
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+
+.darken-bg {
+  background-color: rgba(0, 0, 0, 0.9); }
+
+.error {
+  color: #ff0000; }
+
 .App {
   height: 100vh;
   display: flex;
@@ -53,6 +82,34 @@ input {
       font-size: 16px;
       margin: 10px;
       padding: 20px; }
+  .LoginScreen .form-toggle {
+    color: #80deea;
+    cursor: pointer; }
+  .LoginScreen .auth-form {
+    max-width: 800px;
+    margin: 0 auto; }
+    .LoginScreen .auth-form form {
+      width: 100%; }
+    .LoginScreen .auth-form input {
+      border: none;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+      margin: 5px;
+      padding: 5px;
+      width: 100%; }
+    .LoginScreen .auth-form button {
+      background-color: #ba68c8;
+      border: 1px solid #ffffff;
+      border-radius: 5px;
+      box-sizing: border-box;
+      color: #ffffff;
+      font-size: 20px;
+      margin: 5px;
+      padding: 5px;
+      width: 100%; }
+      .LoginScreen .auth-form button:disabled, .LoginScreen .auth-form button.disabled {
+        background-color: #dcb3e3; }
 
 .Messenger {
   flex-grow: 1;

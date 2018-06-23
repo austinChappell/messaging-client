@@ -24,24 +24,12 @@ const login = async (body) => {
   return await post(url, body);
 };
 
-const fbAuth = async (body) => {
-  const url = `${apiURL}/api/auth/fb_login`;
-  return await post(url, body);
-};
-
-const googleAuth = async (body) => {
-  const url = `${apiURL}/api/auth/google_login`;
-  return await post(url, body);
-};
-
 const loginUser = async (token) => {
   const url = `${apiURL}/api/auth/verify_token`;
   return await post(url, { token });
 };
 
 export default {
-  fbAuth,
-  googleAuth,
   loginUser,
   signUp,
   login,

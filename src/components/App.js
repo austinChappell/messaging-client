@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { GoogleLogin } from 'react-google-login';
 import io from 'socket.io-client';
+import { RingLoader } from 'react-spinners';
 
 // custom apis
 import authAPI from '../api/auth';
@@ -15,8 +14,6 @@ import UserList from './UserList';
 
 // api functions
 const {
-  fbAuth,
-  googleAuth,
   loginUser,
   login,
   signUp,
@@ -35,14 +32,17 @@ const client = new ApolloClient({
 class App extends Component {
   state = {
     checkedToken: false, // false until server has checked token
+    confirmPassword: '',
+    email: '',
+    errorMessage: null,
     firstName: '',
     lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
     loggedIn: false,
     openDrawer: false,
+    password: '',
     selectedUser: null, // will be a user id if not null
+    signingUp: true,
+    submitting: false,
     user: null, // user info for logged in user
   }
 
@@ -64,18 +64,6 @@ class App extends Component {
     this.setState({ checkedToken: true });
   }
 
-  // if user exists with fb creds, log them in, else sign them up
-  fbLogin = async (user) => {
-    const loginResults = await fbAuth(user);
-    this.setUser(loginResults);
-  }
-
-  // if user exists with google creds, log them in, else sign them up
-  googleLogin = async (user) => {
-    const loginResults = await googleAuth(user);
-    this.setUser(loginResults);
-  }
-
   handleChange = (evt, key) => {
     const { value } = evt.target;
     const o = {};
@@ -83,26 +71,34 @@ class App extends Component {
     this.setState(o);
   }
 
-  login = async (evt) => {
-    evt.preventDefault();
-    const {
-      email,
-      password,
-    } = this.state;
-    const body = {
-      email,
-      password,
-    };
-    const result = await login(body);
-    if (!result.error) {
-      this.setUser(result);
+  // called when submitting login form
+  login = (evt, formComplete) => {
+    if (evt) {
+      evt.preventDefault();
     }
+    this.setState({
+      errorMessage: null,
+      submitting: true,
+    }, async () => {
+      const {
+        email,
+        password,
+      } = this.state;
+
+      const body = {
+        email,
+        password,
+      };
+
+      if (formComplete) {
+        const result = await login(body);
+        this.setUser(result);
+      }
+    });
   }
 
   loginUser = async (token) => {
-    console.log('TOKEN', token);
     const loginResults = await loginUser(token);
-    console.log('RSULTS', loginResults);
     if (loginResults.error) {
       // set checkToken to true, but do not log them in
       this.checkedToken();
@@ -128,31 +124,59 @@ class App extends Component {
 
   // store user from db in state
   setUser = (user) => {
-    localStorage.setItem('token', user.token);
-    this.setState({
-      checkedToken: true,
-      loggedIn: true,
-      user,
-    });
+    if (!user.error) {
+      localStorage.setItem('token', user.token);
+      this.setState({
+        checkedToken: true,
+        loggedIn: true,
+        user,
+        errorMessage: null,
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        submitting: false,
+      });
+    } else {
+      this.setState({
+        errorMessage: 'Invalid credentials',
+        submitting: false,
+      });
+    }
   }
 
-  submit = async (evt) => {
+  // called when submitting sign up form
+  signup = (evt, formComplete) => {
     evt.preventDefault();
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-    } = this.state;
-    const body = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-    const result = await signUp(body);
-    console.log('RESULT', result);
+    this.setState({
+      errorMessage: null,
+      submitting: true,
+    }, async () => {
+      if (formComplete) {
+        const {
+          firstName,
+          lastName,
+          email,
+          password,
+        } = this.state;
+        const body = {
+          firstName,
+          lastName,
+          email,
+          password,
+        };
+        const result = await signUp(body);
+        if (result.id) {
+          this.login(null, true);
+        } else {
+          this.setState({
+            errorMessage: 'Error signing up',
+            submitting: false,
+          });
+        }
+      }
+    });
   }
 
   // open and close user list
@@ -161,18 +185,28 @@ class App extends Component {
     this.setState({ openDrawer: !openDrawer });
   }
 
+  // flip between loggin in and signing up
+  toggleForm = () => {
+    const { signingUp } = this.state;
+    this.setState({ signingUp: !signingUp });
+  }
+
+  // this should be broken out into 2 or 3 components
   render() {
     const {
       checkedToken,
-      loggedIn,
-      openDrawer,
-      selectedUser,
-      user,
+      confirmPassword,
+      email,
+      errorMessage,
       firstName,
       lastName,
-      email,
+      loggedIn,
+      openDrawer,
       password,
-      confirmPassword,
+      selectedUser,
+      signingUp,
+      submitting,
+      user,
     } = this.state;
 
     // loader prior to token check
@@ -188,6 +222,167 @@ class App extends Component {
         </div>
       );
     }
+
+    const firstNameComplete = firstName.trim().length > 1;
+    const lastNameComplete = lastName.trim().length > 1;
+    const emailComplete = email.trim().length > 3;
+    const pwComplete = password.trim().length > 6;
+    const pwMatch = password === confirmPassword;
+    const demographicInfoComplete = firstNameComplete && lastNameComplete && emailComplete;
+    const formComplete = demographicInfoComplete && pwComplete && pwMatch;
+
+    const loginFormComplete = emailComplete && pwComplete;
+
+    const spinner = submitting ? (
+      <div className="fixed-fill flex-center darken-bg center">
+        <div className="flex-center-horiz">
+          <h2>
+              Loggin In...
+          </h2>
+          <div className="center">
+            <RingLoader
+              color="#ffffff"
+              loading={submitting}
+            />
+          </div>
+        </div>
+      </div>
+    ) : null;
+
+    const errorNotification = errorMessage
+      ? (
+        <div className="center error">
+          <span>
+            {errorMessage}
+          </span>
+        </div>
+      ) : null;
+
+    const authForm = signingUp
+      ? (
+        <div className="auth-form">
+          <form
+            onSubmit={evt => this.signup(evt, formComplete)}
+          >
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'firstName')}
+                placeholder="First Name"
+                value={firstName}
+              />
+            </div>
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'lastName')}
+                placeholder="Last Name"
+                value={lastName}
+              />
+            </div>
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'email')}
+                placeholder="Email"
+                type="email"
+                value={email}
+              />
+            </div>
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'password')}
+                placeholder="Password"
+                type="password"
+                value={password}
+              />
+            </div>
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'confirmPassword')}
+                placeholder="Confirm Password"
+                type="password"
+                value={confirmPassword}
+              />
+            </div>
+            {errorNotification}
+            <div>
+              <button
+                disabled={!formComplete}
+                type="submit"
+              >
+                Sign Up
+              </button>
+            </div>
+          </form>
+          <div className="center">
+            <p>
+              Already have an account?
+            </p>
+            <span
+              className="form-toggle"
+              onClick={this.toggleForm}
+              onKeyDown={(evt) => {
+                if (evt.keyCode === 13) {
+                  this.toggleForm();
+                }
+              }}
+              role="button"
+              tabIndex="0"
+            >
+              Log In
+            </span>
+          </div>
+        </div>
+      )
+      : (
+        <div className="auth-form">
+          <form
+            onSubmit={evt => this.login(evt, loginFormComplete)}
+          >
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'email')}
+                placeholder="Email"
+                type="email"
+                value={email}
+              />
+            </div>
+            <div>
+              <input
+                onChange={evt => this.handleChange(evt, 'password')}
+                placeholder="Password"
+                type="password"
+                value={password}
+              />
+            </div>
+            {errorNotification}
+            <div>
+              <button
+                disabled={!loginFormComplete}
+                type="submit"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+          <div className="center">
+            <p>
+              Need an account?
+            </p>
+            <span
+              className="form-toggle"
+              onClick={this.toggleForm}
+              onKeyDown={(evt) => {
+                if (evt.keyCode === 13) {
+                  this.toggleForm();
+                }
+              }}
+              role="button"
+              tabIndex="0"
+            >
+              Sign Up
+            </span>
+          </div>
+        </div>
+      );
 
     // if logged in, show messager app
     // else show login buttons
@@ -215,84 +410,14 @@ class App extends Component {
       )
       : (
         <div className="LoginScreen">
-          <h1>
-            My GraphQL Chat App
+          {spinner}
+          <h1 className="center">
+            Austin's
+            <br />
+            GraphQL Chat App
           </h1>
 
-          <div className="sign-up">
-            <form
-              onSubmit={evt => this.submit(evt)}
-            >
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'firstName')}
-                  placeholder="First Name"
-                  value={firstName}
-                />
-              </div>
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'lastName')}
-                  placeholder="Last Name"
-                  value={lastName}
-                />
-              </div>
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'email')}
-                  placeholder="Email"
-                  type="email"
-                  value={email}
-                />
-              </div>
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'password')}
-                  placeholder="Password"
-                  type="password"
-                  value={password}
-                />
-              </div>
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'confirmPassword')}
-                  placeholder="Confirm Password"
-                  type="password"
-                  value={confirmPassword}
-                />
-              </div>
-              <button>
-                Sign Up
-              </button>
-            </form>
-          </div>
-
-          <div className="login">
-            <form
-              onSubmit={evt => this.login(evt)}
-            >
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'email')}
-                  placeholder="Email"
-                  type="email"
-                  value={email}
-                />
-              </div>
-              <div>
-                <input
-                  onChange={evt => this.handleChange(evt, 'password')}
-                  placeholder="Password"
-                  type="password"
-                  value={password}
-                />
-              </div>
-              <button>
-                Login
-              </button>
-            </form>
-          </div>
-
+          {authForm}
         </div>
       );
 

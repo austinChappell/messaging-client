@@ -21,9 +21,8 @@
     "react": "^16.4.1",
     "react-apollo": "^2.1.6",
     "react-dom": "^16.4.1",
-    "react-facebook-login": "^4.0.1",
     "react-fontawesome": "^1.6.1",
-    "react-google-login": "^3.2.1",
+    "react-spinners": "^0.3.2",
     "socket.io-client": "^2.1.1"
   },
   "scripts": {
