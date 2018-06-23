@@ -36,7 +36,7 @@ class Messenger extends Component {
 
     this.state = {
       content: '',
-      friendTyping: true,
+      friendTyping: false,
     };
   }
 
@@ -259,11 +259,7 @@ class Messenger extends Component {
     const title = fetchedUser
       ? fetchedUser.first_name : 'Select A User';
 
-    const typingMessage = friendTyping ? (
-      <p className="typing-message">
-        {`${title} is typing...`}
-      </p>
-    ) : null;
+    const typingMessageClassName = friendTyping ? 'typing-message show' : 'typing-message';
 
     const notificationDot = hasUnread
       ? (
@@ -311,6 +307,9 @@ class Messenger extends Component {
         </div>
 
         <div className={openDrawer ? 'overlay show' : 'overlay'} />
+        <p className={typingMessageClassName}>
+          {`${title} is typing...`}
+        </p>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
             const isSender = user.id === Number(msg.sender_id);
@@ -327,7 +326,6 @@ class Messenger extends Component {
               </div>
             );
           })}
-          {typingMessage}
         </div>
         <form
           onSubmit={evt => this.submit(evt)}

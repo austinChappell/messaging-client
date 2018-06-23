@@ -55,10 +55,12 @@ button {
   flex-direction: column;
   padding: 20px 30px;
   max-width: 1000px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  position: relative; }
   .Messenger .overlay {
     background-color: rgba(0, 0, 0, 0);
-    transition: 250ms; }
+    transition: 250ms;
+    z-index: 2; }
     .Messenger .overlay.show {
       position: fixed;
       top: 0;
@@ -108,10 +110,22 @@ button {
       color: #10232B;
       align-self: flex-start; }
   .Messenger .typing-message {
-    color: #10232B;
+    background-color: #BED588;
+    border-radius: 5px 5px 0 0;
+    color: #ffffff;
     text-align: right;
     margin: 0;
-    padding: 5px 10px; }
+    padding: 5px 10px;
+    text-align: center;
+    height: 40px;
+    box-sizing: border-box;
+    margin-bottom: -40px;
+    line-height: 30px;
+    transition: 250ms;
+    opacity: 0;
+    z-index: 1; }
+    .Messenger .typing-message.show {
+      opacity: 0.9; }
   .Messenger h1 {
     text-align: center; }
 
@@ -123,7 +137,7 @@ button {
   height: 100vh;
   transition: 500ms;
   width: 300px;
-  z-index: 1; }
+  z-index: 3; }
   .UserList.open {
     left: 0; }
   .UserList.closed {

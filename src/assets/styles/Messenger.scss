@@ -5,9 +5,11 @@
   padding: 20px 30px;
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
   .overlay {
     background-color: rgba(0,0,0,0);
     transition: 250ms;
+    z-index: 2;
     &.show {
       position: fixed;
       top: 0;
@@ -67,10 +69,23 @@
     }
   }
   .typing-message {
-    color: $dark;
+    background-color: $primary;
+    border-radius: 5px 5px 0 0;
+    color: $white;
     text-align: right;
     margin: 0;
     padding: 5px 10px;
+    text-align: center;
+    height: 40px;
+    box-sizing: border-box;
+    margin-bottom: -40px;
+    line-height: 30px;
+    transition: 250ms;
+    opacity: 0;
+    z-index: 1;
+    &.show {
+      opacity: 0.9;
+    }
   }
   h1 {
     text-align: center;
