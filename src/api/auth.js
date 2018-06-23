@@ -8,7 +8,10 @@ const post = async (url, body) => {
     body: JSON.stringify(body),
     method: 'POST',
   });
-  return await response.json();
+  if (response.ok) {
+    return response.json();
+  }
+  return { error: 'error' };
 };
 
 const signUp = async (body) => {

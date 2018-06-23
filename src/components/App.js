@@ -93,9 +93,10 @@ class App extends Component {
       email,
       password,
     };
-    const user = await login(body);
-    console.log('USER', user);
-    this.setUser(user);
+    const result = await login(body);
+    if (!result.error) {
+      this.setUser(result);
+    }
   }
 
   loginUser = async (token) => {
