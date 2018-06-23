@@ -1,33 +1,35 @@
+// dependencies
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
 
+// custom queries and helpers
 import queries from '../queries';
 import helpers from '../helpers';
 
 const {
-  getUsers,
-  myUnreadMessages,
+  getUsers, // get all users
+  myUnreadMessages, // get user's unread messages
 } = queries;
 
 const {
-  searchMessages,
-  truncate,
+  searchMessages, // search filter
+  truncate, // helper method to truncate string
 } = helpers;
 
 const propTypes = {
-  fetchUsers: PropTypes.objectOf(PropTypes.any).isRequired,
-  openDrawer: PropTypes.bool.isRequired,
-  selectedUser: PropTypes.string,
-  selectUser: PropTypes.func.isRequired,
-  toggleDrawer: PropTypes.func.isRequired,
-  unreadMessages: PropTypes.objectOf(PropTypes.any).isRequired,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  fetchUsers: PropTypes.objectOf(PropTypes.any).isRequired, // graphql query for users
+  openDrawer: PropTypes.bool.isRequired, // state of drawer
+  selectedUser: PropTypes.string, // user id as string
+  selectUser: PropTypes.func.isRequired, // function to select user
+  toggleDrawer: PropTypes.func.isRequired, // toggle drawer state
+  unreadMessages: PropTypes.objectOf(PropTypes.any).isRequired, // graphql query to get unread messages
+  user: PropTypes.objectOf(PropTypes.any).isRequired, // logged in user info
 };
 
 const defaultProps = {
-  selectedUser: null,
+  selectedUser: null, // null on mount
 };
 
 class UserList extends Component {
@@ -41,6 +43,8 @@ class UserList extends Component {
       fetchUsers,
       openDrawer,
     } = this.props;
+
+    // if drawer is opening, refresh user list
     if (!prevProps.openDrawer && openDrawer) {
       fetchUsers.refetch();
     }
@@ -61,10 +65,14 @@ class UserList extends Component {
     const { fetchUsers } = this.props;
     const { users } = fetchUsers;
     const { searchValue } = this.state;
+
+    // pass in users and search value to helper method
+    // search runs again user first and last name, and message content
     const searchResults = searchMessages(users, searchValue);
     this.setState({ searchResults });
   }
 
+  // fires when user clicks a user in user list
   selectUser = (id) => {
     const { selectUser } = this.props;
     selectUser(id);
@@ -87,6 +95,7 @@ class UserList extends Component {
 
     const { myUnreadMessages: unread } = unreadMessages;
 
+    // just ids of unread messages
     const ids = unread
       ? unread
         .map(m => Number(m.sender_id))

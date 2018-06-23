@@ -1,63 +1,86 @@
+// dependencies
 import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
-
 import { ApolloProvider } from 'react-apollo';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { GoogleLogin } from 'react-google-login';
 import io from 'socket.io-client';
 
+// custom apis
 import authAPI from '../api/auth';
 
+// custom components
 import Messenger from './Messenger';
 import UserList from './UserList';
 
-const { fbAuth, googleAuth, loginUser } = authAPI;
+// api functions
+const {
+  fbAuth,
+  googleAuth,
+  loginUser,
+} = authAPI;
 
+// server url
 const {
   REACT_APP_SERVER_URL,
 } = process.env;
 
+// apollo client
 const client = new ApolloClient({
   uri: `${REACT_APP_SERVER_URL}/graphql`,
 });
 
 class App extends Component {
   state = {
-    checkedToken: false,
+    checkedToken: false, // false until server has checked token
     loggedIn: false,
     openDrawer: false,
-    selectedUser: null,
-    user: null,
+    selectedUser: null, // will be a user id if not null
+    user: null, // user info for logged in user
   }
 
   componentDidMount() {
     const token = localStorage.getItem('token');
+
     if (token) {
       this.loginUser(token);
     } else {
+      // if no token found, set checkToken to true
       this.checkedToken();
     }
-    this.socket = io(REACT_APP_SERVER_URL);
 
-    this.socket.on('connect', () => {
-      console.log('CONNECTED');
-    });
+    // connect the socket to the server
+    this.socket = io(REACT_APP_SERVER_URL);
   }
 
   checkedToken = () => {
     this.setState({ checkedToken: true });
   }
 
+  // if user exists with fb creds, log them in, else sign them up
   fbLogin = async (user) => {
     const loginResults = await fbAuth(user);
     this.setUser(loginResults);
   }
 
-  loginUser = async (token) => {
-    const loginResults = await loginUser(token);
+  // if user exists with google creds, log them in, else sign them up
+  googleLogin = async (user) => {
+    const loginResults = await googleAuth(user);
     this.setUser(loginResults);
   }
 
+  loginUser = async (token) => {
+    const loginResults = await loginUser(token);
+    if (loginResults.error) {
+      // set checkToken to true, but do not log them in
+      this.checkedToken();
+    } else {
+      // set checkToken to true and log in the user
+      this.setUser(loginResults);
+    }
+  }
+
+  // remove token and logout user
   logout = () => {
     localStorage.removeItem('token');
     this.setState({
@@ -67,20 +90,21 @@ class App extends Component {
     });
   }
 
-  googleLogin = async (user) => {
-    const loginResults = await googleAuth(user);
-    this.setUser(loginResults);
-  }
-
   selectUser = (id) => {
     this.setState({ selectedUser: id });
   }
 
+  // store user from db in state
   setUser = (user) => {
     localStorage.setItem('token', user.token);
-    this.setState({ checkedToken: true, loggedIn: true, user });
+    this.setState({
+      checkedToken: true,
+      loggedIn: true,
+      user,
+    });
   }
 
+  // open and close user list
   toggleDrawer = () => {
     const { openDrawer } = this.state;
     this.setState({ openDrawer: !openDrawer });
@@ -95,6 +119,7 @@ class App extends Component {
       user,
     } = this.state;
 
+    // loader prior to token check
     if (!checkedToken) {
       return (
         <div className="LoginScreen">
@@ -108,6 +133,8 @@ class App extends Component {
       );
     }
 
+    // if logged in, show messager app
+    // else show login buttons
     const content = loggedIn
       ? (
         <div className="App">
