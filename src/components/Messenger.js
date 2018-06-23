@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import FontAwesome from 'react-fontawesome';
+import moment from 'moment';
 
 // graphql queries
 import queries from '../queries';
@@ -346,17 +347,24 @@ class Messenger extends Component {
         </p>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
+            console.log('MESSAGE', msg);
+            const time = moment(msg.timestamp).format('LT');
+            console.log('TIME', time);
             const isSender = user.id === Number(msg.sender_id);
             const lastMsg = index === messages.length - 1;
-            const messageClass = isSender
-              ? 'message sender' : 'message recipient';
+            const senderClass = isSender ? 'sender' : 'recipient';
             return (
               <div
                 key={msg.id}
-                className={messageClass}
+                className={`message ${senderClass}`}
                 ref={lastMsg ? el => this.lastMsg = el : false}
               >
-                {msg.content}
+                <span className="time">
+                  {time}
+                </span>
+                <div className={`message-content ${senderClass}`}>
+                  {msg.content}
+                </div>
               </div>
             );
           })}

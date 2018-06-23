@@ -56,21 +56,35 @@
     }
   }
   .message {
-    max-width: 80%;
-    border: 1px solid $color-black;
-    border-radius: 5px;
-    margin: 10px 5px;
-    padding: 10px;
+    .time {
+      color: $dark;
+      font-size: 10px;
+      margin: 0 5px;
+    }
     &.sender {
-      background-color: $primary;
       color: $white;
       text-align: right;
       align-self: flex-end;
     }
     &.recipient {
-      background-color: $secondary;
       color: $dark;
       align-self: flex-start;
+    }
+  .message-content {
+      margin: 0 5px 10px;
+      border-radius: 5px;
+      border: 1px solid $color-black;
+      max-width: 80%;
+      padding: 10px;
+      &.sender {
+        background-color: $primary;
+        color: $white;
+        text-align: right;
+      }
+      &.recipient {
+        background-color: $secondary;
+        color: $dark;
+      }
     }
   }
   .typing-message {

@@ -160,21 +160,30 @@ input {
       background-color: #dddddd;
       color: #cccccc;
       cursor: not-allowed; }
-  .Messenger .message {
-    max-width: 80%;
-    border: 1px solid #234252;
+  .Messenger .message .time {
+    color: #212121;
+    font-size: 10px;
+    margin: 0 5px; }
+  .Messenger .message.sender {
+    color: #ffffff;
+    text-align: right;
+    align-self: flex-end; }
+  .Messenger .message.recipient {
+    color: #212121;
+    align-self: flex-start; }
+  .Messenger .message .message-content {
+    margin: 0 5px 10px;
     border-radius: 5px;
-    margin: 10px 5px;
+    border: 1px solid #234252;
+    max-width: 80%;
     padding: 10px; }
-    .Messenger .message.sender {
+    .Messenger .message .message-content.sender {
       background-color: #ba68c8;
       color: #ffffff;
-      text-align: right;
-      align-self: flex-end; }
-    .Messenger .message.recipient {
+      text-align: right; }
+    .Messenger .message .message-content.recipient {
       background-color: #80deea;
-      color: #212121;
-      align-self: flex-start; }
+      color: #212121; }
   .Messenger .typing-message {
     background-color: #ba68c8;
     border-radius: 5px 5px 0 0;
