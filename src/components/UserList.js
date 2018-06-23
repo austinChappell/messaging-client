@@ -38,7 +38,7 @@ class UserList extends Component {
   }
 
   search = () => {
-    const { users } = this.props.data;
+    const { users } = this.props.getUsers;
     const { searchValue } = this.state;
     const searchResults = searchMessages(users, searchValue);
     this.setState({ searchResults });
@@ -130,7 +130,7 @@ class UserList extends Component {
             "user active"
             :
             "user";
-            
+
           return (
             <div
               key={u.id}
