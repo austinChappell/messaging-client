@@ -92,7 +92,14 @@ class App extends Component {
 
       if (formComplete) {
         const result = await login(body);
-        this.setUser(result);
+        if (!result.error) {
+          this.setUser(result);
+        } else {
+          this.setState({
+            errorMessage: 'Invalid credentials',
+            submitting: false,
+          });
+        }
       }
     });
   }

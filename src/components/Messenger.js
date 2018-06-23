@@ -313,7 +313,7 @@ class Messenger extends Component {
     return (
       <div className="Messenger">
         <div className="navbar">
-          <div className="navbar-left">
+          <div>
             <button
               onClick={toggleDrawer}
               style={{
@@ -350,12 +350,12 @@ class Messenger extends Component {
         </p>
         <div className="messages" ref={this.messageWindow}>
           {messages.map((msg, index) => {
+            const newTimestamp = new Date(msg.timestamp);
             // display local time
-            const time = moment(msg.timestamp).format('LT');
+            const time = moment(newTimestamp).format('LT');
 
             // get day
-            const day = moment(msg.timestamp).format('LL');
-            console.log('DAY', day);
+            const day = moment(newTimestamp).format('LL');
             const today = moment().format('LL');
 
             const isToday = day === today;

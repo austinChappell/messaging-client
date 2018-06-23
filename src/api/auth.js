@@ -21,6 +21,7 @@ const signUp = async (body) => {
 
 const login = async (body) => {
   const url = `${apiURL}/api/auth/login`;
+  const result = await post(url, body);
   return await post(url, body);
 };
 
