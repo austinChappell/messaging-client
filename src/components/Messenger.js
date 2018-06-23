@@ -36,7 +36,7 @@ class Messenger extends Component {
 
     this.state = {
       content: '',
-      friendTyping: false,
+      friendTyping: true,
     };
   }
 
@@ -52,9 +52,16 @@ class Messenger extends Component {
       user,
     } = this.props;
 
-    if (prevProps.fetchUser.user !== fetchUser.user) {
-      if (this.lastMsg) {
-        this.scrollDown();
+    const prevUser = prevProps.fetchUser.user;
+    const currUser = fetchUser.user;
+
+    if (prevUser !== currUser) {
+      if (this.lastMsg && !prevUser) {
+        // initial message load
+        this.scrollDown('instant');
+      } else if (this.lastMsg) {
+        // update existing messages
+        this.scrollDown('smooth');
       }
     }
 
@@ -107,8 +114,8 @@ class Messenger extends Component {
     });
   }
 
-  scrollDown = () => {
-    this.lastMsg.scrollIntoView({ behavior: 'smooth' });
+  scrollDown = (behavior) => {
+    this.lastMsg.scrollIntoView({ behavior });
   }
 
   submit = (evt) => {
@@ -177,9 +184,7 @@ class Messenger extends Component {
       if (senderMatch && recipientMatch) {
         const { friendTyping } = this.state;
         if (!friendTyping) {
-          this.setState({ friendTyping: true }, () => {
-            this.scrollDown();
-          });
+          this.setState({ friendTyping: true });
         }
       }
     });
