@@ -12,6 +12,20 @@ const helpers = {
     return results;
   },
 
+  sortByLatestMessage: (users) => {
+    const mapped = users.map(u => ({ ...u }));
+    return mapped.sort((a, b) => {
+      const aLast = a.last_message ? new Date(a.last_message.timestamp) : null;
+      const bLast = b.last_message ? new Date(b.last_message.timestamp) : null;
+      if (aLast > bLast) {
+        return -1;
+      } if (aLast < bLast) {
+        return 1;
+      }
+      return 0;
+    });
+  },
+
   truncate: (str, length) => {
     if (str.length > length) {
       return `${str.substring(0, length)}...`;

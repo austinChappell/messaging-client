@@ -15,6 +15,7 @@ const {
 
 const {
   searchMessages, // search filter
+  sortByLatestMessage, // sort users by message history, newest on top
   truncate, // helper method to truncate string
 } = helpers;
 
@@ -121,6 +122,8 @@ class UserList extends Component {
       ? searchResults
       : data.users;
 
+    const sortedUsers = sortByLatestMessage(users);
+
     return (
       <div className={userListClassName}>
         <div className="search-bar">
@@ -137,7 +140,7 @@ class UserList extends Component {
           </button>
         </div>
 
-        {users.map((u) => {
+        {sortedUsers.map((u) => {
           const hasUnread = ids.includes(Number(u.id));
 
           const notificationDot = hasUnread

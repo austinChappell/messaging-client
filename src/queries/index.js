@@ -11,6 +11,7 @@ const getUsers = gql`
       }
       last_message(id: $id) {
         content
+        timestamp
       }
     }
   }
