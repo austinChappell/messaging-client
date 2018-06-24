@@ -1,4 +1,10 @@
-const apiURL = process.env.REACT_APP_SERVER_URL;
+const {
+  REACT_APP_ENV,
+  REACT_APP_SERVER_URL,
+  REACT_APP_LOCAL_SERVER_URL,
+} = process.env;
+
+const apiURL = REACT_APP_ENV === 'development' ? REACT_APP_LOCAL_SERVER_URL : REACT_APP_SERVER_URL;
 
 const post = async (url, body) => {
   const response = await fetch(url, {

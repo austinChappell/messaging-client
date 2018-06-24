@@ -21,12 +21,16 @@ const {
 
 // server url
 const {
+  REACT_APP_ENV,
   REACT_APP_SERVER_URL,
+  REACT_APP_LOCAL_SERVER_URL,
 } = process.env;
+
+const apiURL = REACT_APP_ENV === 'development' ? REACT_APP_LOCAL_SERVER_URL : REACT_APP_SERVER_URL;
 
 // apollo client
 const client = new ApolloClient({
-  uri: `${REACT_APP_SERVER_URL}/graphql`,
+  uri: `${apiURL}/graphql`,
 });
 
 class App extends Component {
@@ -57,7 +61,7 @@ class App extends Component {
     }
 
     // connect the socket to the server
-    this.socket = io(REACT_APP_SERVER_URL);
+    this.socket = io(apiURL);
   }
 
   checkedToken = () => {

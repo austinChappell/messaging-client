@@ -9,3 +9,8 @@ install:
   - npm ci
 script:
   - $(npm bin)/cypress run
+deploy:
+  provider: heroku
+  api_key:
+    secure: c767792c-91c3-4ed8-b409-eac567238069
+  app: messaging-app-client
