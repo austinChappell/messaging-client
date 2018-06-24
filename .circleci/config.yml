@@ -13,5 +13,5 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - run: npm install
+      - run: npm ci
       - run: npm run ci
