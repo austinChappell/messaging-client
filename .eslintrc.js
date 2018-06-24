@@ -1,6 +1,12 @@
 module.exports = {
 	extends: 'airbnb',
 	globals: {
+		Cypress: true,
+		cy: true,
+		describe: true,
+		expect: true,
+		fetch: true,
+		it: true,
 		localStorage: true,
 	},
 	rules: {

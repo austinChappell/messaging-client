@@ -176,7 +176,7 @@ input {
     font-size: 16px;
     text-align: center;
     display: flex;
-    margin: 0 15px;
+    margin: 10px 15px;
     align-items: center; }
     .Messenger .display-date span {
       margin: 0 15px; }
@@ -186,7 +186,7 @@ input {
       height: 0px; }
   .Messenger .message .time {
     color: #212121;
-    font-size: 10px;
+    font-size: 14px;
     margin: 0 5px; }
   .Messenger .message.sender {
     color: #ffffff;
@@ -196,7 +196,7 @@ input {
     color: #212121;
     align-self: flex-start; }
   .Messenger .message .message-content {
-    margin: 0 5px 10px;
+    margin: 5px 5px 10px;
     border-radius: 5px;
     border: 1px solid #234252;
     max-width: 80%;

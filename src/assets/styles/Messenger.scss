@@ -60,7 +60,7 @@
     font-size: 16px;
     text-align: center;
     display: flex;
-    margin: 0 15px;
+    margin: 10px 15px;
     align-items: center;
     span {
       margin: 0 15px;
@@ -74,7 +74,7 @@
   .message {
     .time {
       color: $dark;
-      font-size: 10px;
+      font-size: 14px;
       margin: 0 5px;
     }
     &.sender {
@@ -87,7 +87,7 @@
       align-self: flex-start;
     }
   .message-content {
-      margin: 0 5px 10px;
+      margin: 5px 5px 10px;
       border-radius: 5px;
       border: 1px solid $black;
       max-width: 80%;

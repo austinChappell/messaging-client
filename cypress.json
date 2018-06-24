@@ -1,3 +1,5 @@
 {
-  "defaultCommandTimeout": 10000
+  "env": {
+    "url": "http://localhost:3000/"
+  }
 }

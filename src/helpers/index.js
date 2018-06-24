@@ -13,7 +13,9 @@ const helpers = {
   },
 
   sortByLatestMessage: (users) => {
-    const mapped = users.map(u => ({ ...u }));
+    // using object.assign instead of spread operator
+    // cypress.io lacks support for object spread operator
+    const mapped = users.map(u => (Object.assign({}, u)));
     return mapped.sort((a, b) => {
       const aLast = a.last_message ? new Date(a.last_message.timestamp) : null;
       const bLast = b.last_message ? new Date(b.last_message.timestamp) : null;
