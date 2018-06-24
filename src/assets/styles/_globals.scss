@@ -48,5 +48,10 @@ input {
 }
 
 .error {
+  background-color: lighten(#ff0000, 40%);
+  border-radius: 4px;
   color: #ff0000;
+  font-weight: 200;
+  padding: 5px;
+  margin: 5px 0;
 }

@@ -178,7 +178,7 @@ class App extends Component {
           this.login(null, true);
         } else {
           this.setState({
-            errorMessage: 'Error signing up',
+            errorMessage: result.error,
             submitting: false,
           });
         }
