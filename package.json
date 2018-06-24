@@ -34,7 +34,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "sass": "node-sass src/assets/styles/index.scss src/index.css --watch",
-    "cypress": "./node_modules/.bin/cypress run",
+    "cypress": "cypress run",
     "ci": "start-server-and-test :3000 cypress"
   }
 }
