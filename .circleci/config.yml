@@ -14,4 +14,4 @@ jobs:
     steps:
       - checkout
       - run: npm ci
-      - run: npm run ci
+      - run: $(npm bin)/cypress run
