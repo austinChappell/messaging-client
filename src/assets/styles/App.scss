@@ -72,7 +72,7 @@
       width: 100%;
     }
     button {
-      background-color: $primary;
+      background-color: $secondary-dark;
       border: 1px solid $white;
       border-radius: 5px;
       box-sizing: border-box;
@@ -82,7 +82,7 @@
       padding: 5px;
       width: 100%;
       &:disabled, &.disabled {
-        background-color: lighten($primary, 20%);
+        background-color: lighten($secondary-dark, 30%);
       }
     }
   }

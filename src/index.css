@@ -1,15 +1,15 @@
 body {
-  background-color: #212121;
+  background: linear-gradient(#212121, #883997);
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  color: #f5f5f5; }
+  color: #ececec; }
 
 button {
   cursor: pointer; }
 
 input {
-  background-color: #f5f5f5;
+  background-color: #ececec;
   border: none; }
 
 .center {
@@ -61,7 +61,7 @@ input {
       background-color: transparent;
       border: none;
       border-radius: 5px;
-      color: #f5f5f5;
+      color: #ececec;
       font-size: 26px;
       padding: 5px 10px;
       margin: 10px; }
@@ -103,7 +103,7 @@ input {
       padding: 5px;
       width: 100%; }
     .LoginScreen .auth-form button {
-      background-color: #ba68c8;
+      background-color: #4bacb8;
       border: 1px solid #ffffff;
       border-radius: 5px;
       box-sizing: border-box;
@@ -113,7 +113,7 @@ input {
       padding: 5px;
       width: 100%; }
       .LoginScreen .auth-form button:disabled, .LoginScreen .auth-form button.disabled {
-        background-color: #dcb3e3; }
+        background-color: #b9dfe3; }
 
 .Messenger {
   flex-grow: 1;
@@ -135,9 +135,9 @@ input {
       right: 0;
       background-color: rgba(0, 0, 0, 0.8); }
   .Messenger .messages {
-    border: 1px solid #f5f5f5;
+    border: 1px solid #ececec;
     border-radius: 5px;
-    background-color: #f5f5f5;
+    background-color: #ececec;
     flex-grow: 1;
     overflow: auto;
     display: flex;
@@ -148,10 +148,10 @@ input {
     margin-top: 10px; }
     .Messenger .message-input button {
       padding: 10px 20px;
-      background-color: #ee98fb;
+      background-color: #4bacb8;
       border: none;
       border-radius: 0 5px 5px 0;
-      color: #212121;
+      color: #ffffff;
       font-size: 16px; }
     .Messenger .message-input input {
       box-sizing: border-box;
@@ -237,7 +237,7 @@ input {
     left: -300px; }
   .UserList .search-bar {
     padding: 20px;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid #ececec;
     display: flex;
     justify-content: space-between; }
     .UserList .search-bar input {
@@ -252,7 +252,7 @@ input {
       font-size: 30px;
       margin-left: 10px; }
   .UserList .user {
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid #ececec;
     cursor: pointer;
     padding: 20px;
     transition: 500ms; }
