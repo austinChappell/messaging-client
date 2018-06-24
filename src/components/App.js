@@ -192,7 +192,7 @@ class App extends Component {
     this.setState({ openDrawer: !openDrawer });
   }
 
-  // flip between loggin in and signing up
+  // flip between logging in and signing up
   toggleForm = () => {
     const { signingUp } = this.state;
     this.setState({ signingUp: !signingUp });
@@ -244,7 +244,7 @@ class App extends Component {
       <div className="fixed-fill flex-center darken-bg center">
         <div className="flex-center-horiz">
           <h2>
-              Loggin In...
+              Logging In...
           </h2>
           <div className="center">
             <RingLoader
