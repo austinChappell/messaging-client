@@ -1,5 +1,6 @@
 {
   "env": {
-    "url": "https://messaging-app-client.herokuapp.com/"
+    "url": "https://messaging-app-client.herokuapp.com/",
+    "devUrl": "http://localhost:3000/"
   }
 }

@@ -1,4 +1,4 @@
-const url = Cypress.env('url');
+const url = process.env.REACT_APP_ENV === 'development' ? Cypress.env('devUrl') : Cypress.env('url');
 
 describe('Users', () => {
   it('can open user list', () => {
