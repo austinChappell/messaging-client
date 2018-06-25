@@ -75,27 +75,28 @@ class Messenger extends Component {
         selectedUser,
       } = this.props;
 
-      // refetch messages
-      fetchUser.refetch();
-
-      // mark all messages in view as read
-      setTimeout(() => {
-        markAsRead({
-          variables: {
-            recipient_id: user.id,
-            sender_id: selectedUser,
-          },
-          refetchQueries: [
-            {
-              // update unread message list
-              query: myUnreadMessages,
-              variables: {
-                id: user.id,
-              },
+      if (selectedUser) {
+        // refetch messages
+        fetchUser.refetch();
+        // mark all messages in view as read
+        setTimeout(() => {
+          markAsRead({
+            variables: {
+              recipient_id: user.id,
+              sender_id: selectedUser,
             },
-          ],
-        });
-      }, 1000);
+            refetchQueries: [
+              {
+                // update unread message list
+                query: myUnreadMessages,
+                variables: {
+                  id: user.id,
+                },
+              },
+            ],
+          });
+        }, 1000);
+      }
     }
   }
 
@@ -383,8 +384,6 @@ class Messenger extends Component {
                   <hr />
                 </div>
               ) : null;
-
-            console.log('DISPLAY DATE', displayDate);
 
             const isSender = user.id === Number(msg.sender_id);
             const lastMsg = index === messages.length - 1;
