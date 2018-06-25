@@ -4,7 +4,6 @@ describe('Authentication', () => {
   it('Can successfully login', () => {
     cy.visit(url);
     // let heroku servers wake up
-    cy.wait(30000);
     const loginToggle = cy.get('.form-toggle');
     loginToggle.click();
     cy.get('input[type=email]')
