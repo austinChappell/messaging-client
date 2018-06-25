@@ -7,6 +7,7 @@ import { RingLoader } from 'react-spinners';
 
 // custom apis
 import authAPI from '../api/auth';
+import data from '../assets/data';
 
 // custom components
 import Messenger from './Messenger';
@@ -20,11 +21,7 @@ const {
 } = authAPI;
 
 // server url
-const {
-  REACT_APP_SERVER_URL,
-} = process.env;
-
-const apiURL = REACT_APP_SERVER_URL;
+const { apiURL } = data;
 
 // apollo client
 const client = new ApolloClient({

@@ -1,8 +1,6 @@
-const {
-  REACT_APP_SERVER_URL,
-} = process.env;
+import data from '../assets/data';
 
-const apiURL = REACT_APP_SERVER_URL;
+const { apiURL } = data;
 
 const post = async (url, body) => {
   const response = await fetch(url, {
